@@ -35,9 +35,11 @@ const int so_item = 9;
 #define X_Notification 115
 #define Y_Notification 26
 
-#define PAGE_DOWN 81// 224
+#define PAGE_DOWN 81 // 224
 #define PAGE_UP 73
 #define INSERT 82
+#define DEL 83
+#define HOME 71
 
 
 
