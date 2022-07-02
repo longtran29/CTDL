@@ -1,18 +1,16 @@
 #pragma once
 
 
-char thucdon [so_item][50] = {"1. Nhap danh sach hoc vien",
-			                  "2. Liet ke danh sach      ",
-			                  "3. Sua danh sach may bay  ",
-			                  "4. Ghi mot hoc vien       ",
-			                  "5. Ghi danh sach          ",
-			                  "6. Mo  danh sach          ",
-			                  "7. Them sv co thu tu      ",
-			                  "8. Ket thuc chuong trinh  "};
+char thucdon [so_item][50] = {  "1.Quan Li Cac May Bay",
+					   "2.Quan Li Cac Chuyen Bay",
+					   "3.Dang Ky Ve May Bay",
+					   "4.Huy Bo Ve May Bay",
+					   "5.Xem Danh Sach Hanh Khach Chi Tiet",
+					   "6.Xem So Do Cho Ngoi & Danh Sach Ve Con Trong",
+					   "7.Xem Chi Tiet So Lan Thuc Hien Chuyen Bay",
+					   "8.Xem Cac Chuyen Bay Di Toi Cac Dia Danh",
+					   "0. Thoat chuong trinh"};
 			          
-					  
-
-
 
 void MenuCenter() {
 	
@@ -25,15 +23,15 @@ void MenuCenter() {
 	do {
 		
 		chon = MenuDong (thucdon);
-		system ("cls");
+		clrscr();
 		switch(chon) {
 				
 			case 1:
-			Nhap_DS_MB(planeList);
+			MenuManageAirplane(planeList);
 			break;
 				
 			case 2 :
-				Xuat_DS_MB(planeList);
+//				Xuat_DS_MB(planeList);
 				break;
 			case 3:
 //				Chinh_Sua_MB(planeList);

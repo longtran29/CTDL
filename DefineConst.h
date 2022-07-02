@@ -18,6 +18,26 @@ using namespace std;
 
 #define Y_Display 3
 
+// ===================Menu Setting================
+const int so_item = 9;
+#define horizonMenu 40
+#define vertiMenu 8
+
+
+// =============== Macro key ===================
+#define ESC  27
+#define ENTER 13
+
+// Toa do phan huong dan
+#define x_hd 5
+#define y_hd 27
+// Toa do phan thong bao
+#define X_Notification 115
+#define Y_Notification 26
+
+#define PAGE_DOWN 81// 224
+#define PAGE_UP 73
+#define INSERT 82
 
 
 

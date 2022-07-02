@@ -5,12 +5,11 @@
 #include <string.h>
 #include <windows.h>
 #include <mylib.h>
+#include<iomanip>
 #include "DefineConst.h"
 #include "graphic.h"
 #include "Airplane.h"
 #include "Interfaces.h"
-
-
 
 
 
@@ -39,9 +38,10 @@ struct Flight {
 
 int main() {
 	
+
 			
-		MenuCenter();
-	
+	MenuCenter();
+		
 	
 	
 	return 0;
