@@ -153,9 +153,9 @@ void Xuat_DS_MB(listPlane list, int startIndex) {
 		show_one_plane(list.planes[i],i);
 		
 	}
+	
 
 
-	getch();
 
 }
 
@@ -206,40 +206,57 @@ void MenuManageAirplane(listPlane &list) {
 	
 	TotalPage = (int)ceil( (double)list.n/NumberPerPage );
 	CurrentPage = 1;
-	
 	int signal;
 	
 	while(true) {
 		
-		while(_kbhit()) {
+		while (kbhit()){
 			
-			signal = _getch();
+			signal = getch();
 			
 			if(signal == ESC) return;
 			
 			if(signal == 224) {
-			
-				if(signal == INSERT) {
 				
-					gotoxy(X_Notification,Y_Notification+1);cout <<"Danh sach day,khong the them";
-						return;
+				signal = _getch();
 				
-				
-				
+				if(signal == PAGE_UP && CurrentPage > 1) {
+					
+					CurrentPage--;
+					Xuat_DS_MB(list,(CurrentPage-1)*CurrentPage);
 				}
-				system("cls");
-				CreateForm(titleDisplay,3,27);
-				Nhap_DS_MB(list);
-				system("cls");
-//				TotalPage = (int) ceil((double)list.n/NumberPerPage);
-				Xuat_DS_MB(list, (CurrentPage-1)*NumberPerPage);
+				else if (signal == PAGE_DOWN && CurrentPage < TotalPage) {
+					CurrentPage++;
+					
+					Xuat_DS_MB(list,(CurrentPage-1)*CurrentPage);	
+				}
 			
+				else if(signal == INSERT) {
+				
+					if(list.n == MAXLIST) {
+						gotoxy(X_Notification,Y_Notification+1);cout <<"Danh sach day,khong the them";
+						return;
+					}
+					else {
+						system("cls");
+						CreateForm(titleDisplay,3,27);
+						Nhap_DS_MB(list);
+						system("cls");
+						
+						TotalPage = (int) ceil((double)list.n/NumberPerPage);
+						Xuat_DS_MB(list, (CurrentPage-1)*NumberPerPage);
+						
+					}
+				
+				
+				
+				} 
+				else if(signal == DEL) {
+					return ;
+				}
+				
 			
-			
-			
-			
-			
-			
+		
 			}
 			
 			
