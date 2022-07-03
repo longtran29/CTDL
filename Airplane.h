@@ -43,6 +43,58 @@ void WriteAirplaneToFile(listPlane &list)
 	fileout.close();
 }
 
+
+void ReadAirplaneFile(listPlane &list)
+{
+	ifstream filein;
+	filein.open("DSMB.TXT", ios_base::in);// ios_base::in la de doc
+
+	
+	string temp;
+	int i = 0;
+	if( filein.is_open() )
+	{
+		while(!filein.eof())
+		{
+			DetailInfo *plane = new DetailInfo;
+			
+			filein>> plane->serialPlane;
+		
+			filein>> plane->typePlane;
+			filein>>plane->seats;
+			
+			
+			list.planes[i++] = plane;
+			list.n++;
+			filein.ignore();
+			if (filein.eof()) break;
+			
+		}
+	}
+	filein.close();
+}
+
+
+//void ReadAirplaneFile(listPlane &list) {
+//	 char *filename = "DSMB.TXT";
+// FILE * f; DetailInfo plane;
+// if ((f=fopen(filename,"rb"))==NULL)
+// {  BaoLoi ("Loi mo file de doc"); return ;
+// }
+//  
+// while  (fread (&plane, sizeof (DetailInfo), 1, f)!=0) {
+// 	list.planes[list.n]=new DetailInfo;
+// 	*list.planes[list.n]=plane;
+// 	list.n ++;
+// }
+//    
+// fclose(f);
+// BaoLoi ("Da load xong danh sach vao bo nho");
+//
+//}
+
+
+
 int Check_Trung(listPlane &list, const char *serialNum) {
 	
 	for(int i=0; i< list.n; i++) {
@@ -253,6 +305,8 @@ void Nhap_MB(listPlane &list, bool editing= false, bool deleting = false) {
  	
  
 void MenuManageAirplane(listPlane &list) {
+	
+	
 	
 	Xuat_DS_MB(list, 0);
 	
