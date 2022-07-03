@@ -25,8 +25,15 @@ const int so_item = 9;
 
 
 // =============== Macro key ===================
-#define ESC  27
+#define ESC 27
 #define ENTER 13
+#define PAGE_DOWN 81 // 224
+#define PAGE_UP 73
+#define INSERT 82
+#define DEL 83
+#define HOME 71
+#define BACKSPACE 8
+
 
 // Toa do phan huong dan
 #define x_hd 5
@@ -35,11 +42,11 @@ const int so_item = 9;
 #define X_Notification 115
 #define Y_Notification 26
 
-#define PAGE_DOWN 81 // 224
-#define PAGE_UP 73
-#define INSERT 82
-#define DEL 83
-#define HOME 71
 
+
+
+///////////////
+#define x_add 25
+#define y_add 4
 
 

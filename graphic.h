@@ -11,6 +11,12 @@ void Normal (int val1, int val2) {
 	SetBGColor(val2);
 }
 
+void ShowCur(bool CursorVisibility)
+{
+	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_CURSOR_INFO cursor = { 1, CursorVisibility };
+	SetConsoleCursorInfo(handle, &cursor);
+}
 
 void HighLight () {
 //	SetColor(15); 
