@@ -6,13 +6,11 @@
 #include <windows.h>
 #include <mylib.h>
 #include<iomanip>
+#include<fstream>
 #include "DefineConst.h"
 #include "graphic.h"
 #include "Airplane.h"
 #include "Interfaces.h"
-
-
-
 
 
 struct Passenger {

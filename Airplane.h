@@ -80,48 +80,13 @@ void Display(string content[], int numContent) {
 
 
 
-int Nhap_Thong_Tin_MB(listPlane &list, DetailInfo &plane) {
-	
-	while(1) {
-		
-		
-		gotoxy(wherex(), wherey());
-		cout<<"Nhap so hieu may bay ( 0 la ket thuc ) :";
-//		getline(cin, plane.serialPlane);
-		cin>>plane.serialPlane;
-		
-
-		
-
-		if( Check_Trung(list, plane.serialPlane) ==1) {
-			BaoLoi("May bay da trong danh sach");
-			continue;
-		}
-
-
-		cout<<"Nhap loai may bay :";
-		cin>> plane.typePlane;
-		
-		
-		cout<<"Nhap cho ngoi may bay :";
-		cin>> plane.seats;	
-		
-		if(plane.seats==0) return 0;
-		
-		return 1;
-	
-		
-	}
-	
-}
-
-DetailInfo *addPlane(DetailInfo &plane) {
-	
-	DetailInfo *t = new DetailInfo;
-	*t = plane;
-	return t;
-	
-}
+//DetailInfo *addPlane(DetailInfo &plane) {
+//	
+//	DetailInfo *t = new DetailInfo;
+//	*t = plane;
+//	return t;
+//	
+//}
 
 
  
@@ -187,19 +152,19 @@ void CreateForm(string content[], int numContent, int length) {
 }
 
 
-void Nhap_DS_MB(listPlane &list ) {
-	DetailInfo plane;
-
-	while(list.n < MAXLIST) {
-	
-		if(Nhap_Thong_Tin_MB(list,plane) == 0) return;
-		list.planes[list.n] = addPlane(plane);
-		*list.planes[list.n] = plane;
-		list.n++;
-		
-	}
-		
-}
+//void Nhap_DS_MB(listPlane &list ) {
+//	DetailInfo plane;
+//
+//	while(list.n < MAXLIST) {
+//	
+//		if(Nhap_Thong_Tin_MB(list,plane) == 0) return;
+//		list.planes[list.n] = addPlane(plane);
+//		*list.planes[list.n] = plane;
+//		list.n++;
+//		
+//	}
+//		
+//}
 
 
 void Nhap_MB(listPlane &list, bool editing= false, bool deleting = false) {

@@ -27,8 +27,8 @@ void MenuCenter() {
 		switch(chon) {
 				
 			case 1:
-			MenuManageAirplane(planeList);
-			break;
+				MenuManageAirplane(planeList);
+				break;
 				
 			case 2 :
 //				Xuat_DS_MB(planeList);
