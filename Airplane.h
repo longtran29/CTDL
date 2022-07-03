@@ -1,12 +1,16 @@
 #pragma once
 #include<math.h>
+#include "ConstraintTP.h"
+
+
 string titleDisplay[] ={"So hieu", "Loai MB", "So cho ngoi"};
 int TotalPage = 0;
 int CurrentPage = 0; 
+
 struct DetailInfo {
 	
-	char serialPlane[4];
-	char typePlane[4];
+	char serialPlane[15];
+	char typePlane[40];
 	int seats;
 };
 
@@ -18,6 +22,8 @@ struct Plane {
 }  ;
 
 typedef struct Plane listPlane;
+
+
 
 
 int Check_Trung(listPlane &list, char *serialNum) {
@@ -33,7 +39,6 @@ int Check_Trung(listPlane &list, char *serialNum) {
 }
 
 
-
 void Display(string content[], int numContent) {
 	
 	// mau vang
@@ -44,8 +49,6 @@ void Display(string content[], int numContent) {
 		gotoxy(xKeyDisplay[i] + 3, 4);
 		cout<<content[i];
 	}
-	
-	
 	
 	gotoxy(x_hd,y_hd);
 	cout << " Huong dan " ;
@@ -58,15 +61,14 @@ void Display(string content[], int numContent) {
 
 }
 
-					  
+
 
 int Nhap_Thong_Tin_MB(listPlane &list, DetailInfo &plane) {
 	
-	
-
 	while(1) {
 		
-	
+		
+		gotoxy(wherex(), wherey());
 		cout<<"Nhap so hieu may bay ( 0 la ket thuc ) :";
 //		getline(cin, plane.serialPlane);
 		cin>>plane.serialPlane;
@@ -78,8 +80,7 @@ int Nhap_Thong_Tin_MB(listPlane &list, DetailInfo &plane) {
 			BaoLoi("May bay da trong danh sach");
 			continue;
 		}
-	
-		
+
 
 		cout<<"Nhap loai may bay :";
 		cin>> plane.typePlane;
@@ -94,7 +95,6 @@ int Nhap_Thong_Tin_MB(listPlane &list, DetailInfo &plane) {
 	
 		
 	}
-
 	
 }
 
@@ -104,6 +104,70 @@ DetailInfo *addPlane(DetailInfo &plane) {
 	*t = plane;
 	return t;
 	
+}
+
+
+ 
+
+void show_one_plane(DetailInfo *plane, int position) {
+	
+	// plane la con tro ->
+	
+//	cout<<"Gia tri";
+//	cout<<(*(plane)).serialPlane;
+	
+	gotoxy(xKeyDisplay[0] + 3, Y_Display + 3 + position*3);printf("%-15s",plane->serialPlane);
+	gotoxy(xKeyDisplay[1] + 3, Y_Display + 3 + position*3);printf("%-15s",plane->typePlane);
+	gotoxy(xKeyDisplay[2] + 3, Y_Display + 3 + position*3);printf("%-15d",plane->seats);
+	
+	
+}
+
+void Xuat_DS_MB(listPlane list, int startIndex) {
+	
+	gotoxy(40,1);
+	cout<<"Danh sach may bay";
+	gotoxy(1,2);
+	cout << " So luong may bay : " <<list.n;
+	Display(titleDisplay,3);
+	
+	for(int i=0; i +startIndex < list.n && i< NumberPerPage; i++) {
+		
+		show_one_plane(list.planes[i],i);
+		
+	}
+	
+
+}
+
+void ChangePage(listPlane list) {
+	
+	
+	
+	Xuat_DS_MB(list, (CurrentPage-1)* NumberPerPage);
+}
+
+
+void CreateRow(int x, int y, string content, int length) {
+	
+	gotoxy(x,y);
+	cout<<content;
+}
+
+
+void CreateForm(string content[], int numContent, int length) {
+	
+	int y = y_add;
+	
+	for(int i=0; i< numContent; i++) {
+	
+		
+		CreateRow(x_add,y,content[i], length);
+		y = y+ 3;
+	
+	}
+	
+
 }
 
 
@@ -122,84 +186,44 @@ void Nhap_DS_MB(listPlane &list ) {
 }
 
 
-void show_one_plane(DetailInfo *plane, int position) {
+void Nhap_MB(listPlane &list, bool editing= false, bool deleting = false) {
 	
-	// plane la con tro ->
-	
-//	cout<<"Gia tri";
-//	cout<<(*(plane)).serialPlane;
-	
-	gotoxy(xKeyDisplay[0] + 3, Y_Display + 3 + position*3);printf("%-15s",plane->serialPlane);
-	gotoxy(xKeyDisplay[1] + 3, Y_Display + 3 + position*3);printf("%-15s",plane->typePlane);
-	gotoxy(xKeyDisplay[2] + 3, Y_Display + 3 + position*3);printf("%-15d",plane->seats);
-	
+		int order = 0;
+ 		string ID;
+ 	
+ 	
+ 		while(true) {
+ 		
+ 		switch(order) {
+ 			case 0 :
+ 				{
+ 					
+ 					ConstraintLetterAndNumber(ID,order,12);
+ 					if(ID == "") {
+						BaoLoi(" Vui Long Khong Bo Trong ");
+						break;
+					 }
+ 				
+				 }
+ 			case 1:
+ 				
+ 				break;
+ 				
+ 			
+ 			
+ 			
+		 }
+ 		
+ 		
+ 		
+	 }
 	
 	
 }
-
-
-void Xuat_DS_MB(listPlane list, int startIndex) {
-	
-
-	
-	gotoxy(40,1);
-	cout<<"Danh sach may bay";
-	gotoxy(1,2);
-	cout << " So luong may bay : " <<list.n;
-	Display(titleDisplay,3);
-	
-	for(int i=0; i +startIndex < list.n && i< NumberPerPage; i++) {
-		
-		show_one_plane(list.planes[i],i);
-		
-	}
-	
-
-
-
-}
-
-void ChangePage(listPlane list) {
-	
-	
-	
-	Xuat_DS_MB(list, (CurrentPage-1)* NumberPerPage);
-}
-
-
-void CreateRow(int x, int y, string content, int length) {
-	
-	
-	gotoxy(x - 2, y - 1);
-	cout << char(176) << setw(length) << setfill(char(176)) << char(176) << char(176);
-
-	gotoxy(x - 2, y);
-	cout << char(176) << content << setw(length - content.length() + 1) << setfill(' ') << char(176);
-
-		
-	
-}
-
-
-void CreateForm(string content[], int numContent, int length) {
-	
-	int y = 4;
-	
-	for(int i=0; i< numContent; i++) {
-	
-		
-		CreateRow(115,y,content[i], length);
-		y = y+ 3;
-	
-	}
-	
-
-
-
-
-
-}
-
+ 	
+ 
+ 	
+ 
 void MenuManageAirplane(listPlane &list) {
 	
 	Xuat_DS_MB(list, 0);
@@ -240,9 +264,12 @@ void MenuManageAirplane(listPlane &list) {
 					else {
 						system("cls");
 						CreateForm(titleDisplay,3,27);
-						Nhap_DS_MB(list);
-						system("cls");
-						
+						gotoxy(115 + 12,0 * 3 + 4);
+						Nhap_MB(list);
+						ShowCur(true);
+//						Nhap_DS_MB(list);
+//						system("cls");
+//						
 						TotalPage = (int) ceil((double)list.n/NumberPerPage);
 						Xuat_DS_MB(list, (CurrentPage-1)*NumberPerPage);
 						
@@ -259,18 +286,10 @@ void MenuManageAirplane(listPlane &list) {
 		
 			}
 			
-			
-		
-		
-		
-		
-		
-		
-		
+
 		}
 		
-		
-		
+
 		
 	}
 
