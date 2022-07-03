@@ -24,17 +24,34 @@ struct Plane {
 typedef struct Plane listPlane;
 
 
+void WriteAirplaneToFile(listPlane &list)
+{
+	ofstream fileout;
+	fileout.open("DSMB.TXT",ios_base::out);// ios_base::out la de ghi vao file
+	if( fileout.is_open() )
+	{
+		for( int i = 0 ; i < list.n ; i++)
+		{
+			fileout << list.planes[i]->serialPlane <<" "<<list.planes[i]->typePlane<<" "<<list.planes[i]->seats<<endl;
+		}
+	}
+	else
+	{
+		gotoxy(X_Notification,Y_Notification+1);
+		cout << " Ket noi file de ghi vao that bai";
+	}
+	fileout.close();
+}
 
-
-int Check_Trung(listPlane &list, char *serialNum) {
+int Check_Trung(listPlane &list, const char *serialNum) {
 	
 	for(int i=0; i< list.n; i++) {
 	
 		int response = strcmp(((list.planes[i])->serialPlane), serialNum);
-		if(response == 0) return 1;
+		if(response == 0) return i;
 	
 	}
-	return 0;	
+	return -1 ;	
 	
 }
 
@@ -149,7 +166,6 @@ void ChangePage(listPlane list) {
 
 
 void CreateRow(int x, int y, string content, int length) {
-	
 	gotoxy(x,y);
 	cout<<content;
 }
@@ -190,12 +206,14 @@ void Nhap_MB(listPlane &list, bool editing= false, bool deleting = false) {
 	
 		int order = 0;
  		string ID;
+ 		string typePlane;
+ 		int nchair = 0;
  	
- 	
- 		while(true) {
+ 	bool quit = false;
+ 	while(!quit) {
  		
  		switch(order) {
- 			case 0 :
+ 			case 0 : // nhap cho so hieu mb
  				{
  					
  					ConstraintLetterAndNumber(ID,order,12);
@@ -203,11 +221,56 @@ void Nhap_MB(listPlane &list, bool editing= false, bool deleting = false) {
 						BaoLoi(" Vui Long Khong Bo Trong ");
 						break;
 					 }
- 				
+ 					if(Check_Trung(list, ID.c_str()) >=0) {
+					 
+					 	BaoLoi(" So hieu  trung trong ds ");
+						break;
+					 
+					 }
 				 }
- 			case 1:
+				 order++;
+				 break;
+ 			case 1: // nhap loai type
+ 				ConstraintLetter(typePlane,order,12);
  				
+ 				if(typePlane == "") {
+				 	
+				 	BaoLoi(" Vui Long Khong Bo Trong ");
+					break;
+				 
+				 }
+ 				order++;	
  				break;
+ 			case 2: // nhap cho ngoi
+ 				ConstraintNumber(nchair,order,12,999);
+ 				
+ 				if(nchair <1) {
+ 					BaoLoi("Khong hop le");
+					break;
+				 }
+				if(nchair< 20) {
+					BaoLoi("So ghe >= 20");
+					break;
+				}
+				order++;
+ 				break;
+ 			case 3:
+ 				{
+ 					list.planes[list.n] = new DetailInfo;
+ 					strcpy((list.planes[list.n]->serialPlane),ID.c_str());
+					strcpy((list.planes[list.n]->typePlane),typePlane.c_str());
+					list.planes[list.n]->seats = nchair;
+					list.n++;
+					gotoxy(X_Notification,Y_Notification+1);
+					cout << " Them thanh cong ";
+				 }
+				 
+ 				WriteAirplaneToFile(list);
+ 				quit = true;
+ 				break;
+ 				
+ 				
+ 				
  				
  			
  			
@@ -266,10 +329,7 @@ void MenuManageAirplane(listPlane &list) {
 						CreateForm(titleDisplay,3,27);
 						gotoxy(115 + 12,0 * 3 + 4);
 						Nhap_MB(list);
-						ShowCur(true);
-//						Nhap_DS_MB(list);
-//						system("cls");
-//						
+						system("cls");
 						TotalPage = (int) ceil((double)list.n/NumberPerPage);
 						Xuat_DS_MB(list, (CurrentPage-1)*NumberPerPage);
 						
