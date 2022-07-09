@@ -10,27 +10,9 @@
 #include "DefineConst.h"
 #include "graphic.h"
 #include "Airplane.h"
+#include "Flight.h"
+#include "Passenger.h"
 #include "Interfaces.h"
-
-
-struct Passenger {
-	char indentity[12];
-	char familyName[6];
-	char firstName[8];
-	char Gender[4];
-};
-
-
-
-struct Flight {
-
-	char serialNumber[4];
-	char departTime[15];
-	char arrivalPlace[20];
-	boolean status;
-
-};
-
 
 
 

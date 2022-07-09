@@ -1,9 +1,10 @@
 #pragma once
 #include<math.h>
 #include "ConstraintTP.h"
-
+#include <sstream>
 
 string titleDisplay[] ={"So hieu", "Loai MB", "So cho ngoi"};
+int x_Pos[7] = {1,20,45,63,80,95, 107};
 int TotalPage = 0;
 int CurrentPage = 0; 
 
@@ -30,9 +31,12 @@ void WriteAirplaneToFile(listPlane &list)
 	fileout.open("DSMB.TXT",ios_base::out);// ios_base::out la de ghi vao file
 	if( fileout.is_open() )
 	{
-		for( int i = 0 ; i < list.n ; i++)
+		for( int i = 0 ; i <= (list.n-1) ; i++)
 		{
+			
+		
 			fileout << list.planes[i]->serialPlane <<" "<<list.planes[i]->typePlane<<" "<<list.planes[i]->seats<<endl;
+			
 		}
 	}
 	else
@@ -48,50 +52,36 @@ void ReadAirplaneFile(listPlane &list)
 {
 	ifstream filein;
 	filein.open("DSMB.TXT", ios_base::in);// ios_base::in la de doc
+ string lines[3];
+ string line;
+ string serial; string type;
+ int i=0;
+ int seat;
 
-	
-	string temp;
-	int i = 0;
 	if( filein.is_open() )
 	{
-		while(!filein.eof())
-		{
+	
+	
+	 while(!filein.eof())
+        {
 			DetailInfo *plane = new DetailInfo;
-			
-			filein>> plane->serialPlane;
-		
-			filein>> plane->typePlane;
-			filein>>plane->seats;
-			
-			
-			list.planes[i++] = plane;
+            filein >> plane->serialPlane;
+            filein >> plane->typePlane;
+            filein >> plane->seats;
+            
+            if(filein == NULL) {
+            	break;
+			}
+		 
+            list.planes[i++] = plane;
 			list.n++;
-			filein.ignore();
-			if (filein.eof()) break;
-			
-		}
+        }
+	 
+	
 	}
 	filein.close();
 }
 
-
-//void ReadAirplaneFile(listPlane &list) {
-//	 char *filename = "DSMB.TXT";
-// FILE * f; DetailInfo plane;
-// if ((f=fopen(filename,"rb"))==NULL)
-// {  BaoLoi ("Loi mo file de doc"); return ;
-// }
-//  
-// while  (fread (&plane, sizeof (DetailInfo), 1, f)!=0) {
-// 	list.planes[list.n]=new DetailInfo;
-// 	*list.planes[list.n]=plane;
-// 	list.n ++;
-// }
-//    
-// fclose(f);
-// BaoLoi ("Da load xong danh sach vao bo nho");
-//
-//}
 
 
 
@@ -110,12 +100,12 @@ int Check_Trung(listPlane &list, const char *serialNum) {
 
 void Display(string content[], int numContent) {
 	
-	// mau vang
-
+	
+// mau vang
 	system("color 0E");
 	Normal(14,0);
 	for(int i=0; i< numContent; i++) {
-		gotoxy(xKeyDisplay[i] + 3, 4);
+		gotoxy(x_Pos[i] + 3, 4);
 		cout<<content[i];
 	}
 	
@@ -127,6 +117,7 @@ void Display(string content[], int numContent) {
 	cout << " Insert:Them || Del:Xoa ";
 	gotoxy(x_hd,y_hd + 4);
 	cout << " Home:Chinh Sua || ESC : thoat" ;
+	
 
 }
 
@@ -150,9 +141,9 @@ void show_one_plane(DetailInfo *plane, int position) {
 //	cout<<"Gia tri";
 //	cout<<(*(plane)).serialPlane;
 	
-	gotoxy(xKeyDisplay[0] + 3, Y_Display + 3 + position*3);printf("%-15s",plane->serialPlane);
-	gotoxy(xKeyDisplay[1] + 3, Y_Display + 3 + position*3);printf("%-15s",plane->typePlane);
-	gotoxy(xKeyDisplay[2] + 3, Y_Display + 3 + position*3);printf("%-15d",plane->seats);
+	gotoxy(x_Pos[0] + 3, Y_Display + 3 + position*3);printf("%-15s",plane->serialPlane);
+	gotoxy(x_Pos[1] + 3, Y_Display + 3 + position*3);printf("%-15s",plane->typePlane);
+	gotoxy(x_Pos[2] + 3, Y_Display + 3 + position*3);printf("%-15d",plane->seats);
 	
 	
 }
@@ -163,7 +154,7 @@ void Xuat_DS_MB(listPlane list, int startIndex) {
 	cout<<"Danh sach may bay";
 	gotoxy(1,2);
 	cout << " So luong may bay : " <<list.n;
-	Display(titleDisplay,3);
+	
 	
 	for(int i=0; i +startIndex < list.n && i< NumberPerPage; i++) {
 		
@@ -306,16 +297,15 @@ void Nhap_MB(listPlane &list, bool editing= false, bool deleting = false) {
  
 void MenuManageAirplane(listPlane &list) {
 	
-	
-	
+	Display(titleDisplay,3);
 	Xuat_DS_MB(list, 0);
+	
 	
 	TotalPage = (int)ceil( (double)list.n/NumberPerPage );
 	CurrentPage = 1;
 	int signal;
 	
 	while(true) {
-		
 		while (kbhit()){
 			
 			signal = getch();
@@ -355,7 +345,6 @@ void MenuManageAirplane(listPlane &list) {
 					}
 				
 				
-				
 				} 
 				else if(signal == DEL) {
 					return ;
@@ -367,10 +356,8 @@ void MenuManageAirplane(listPlane &list) {
 			
 
 		}
-		
-
-		
 	}
+		
 
 
 }

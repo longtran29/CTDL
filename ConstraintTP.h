@@ -144,4 +144,46 @@ void ConstraintNumber(int &num, int order, int width, int limitseats) {
 	
 }
 
+void ConstraintsForLetterAndSpace(string &destination,int order,int width) {
+	gotoxy(x_add+width,order*3+y_add);
+	int signal;
+	int lens = (int) destination.length();
+	while(true) {
+		
+		while(kbhit()) {
+			
+			while(true) {
+				signal = getch();
+				if(signal != 224 && signal != BACKSPACE && signal !=0 ) {
+				if( ( 65 <= signal && signal <= 90 ) || ( 97 <= signal && signal <= 122 ) || signal == SPACE)
+					{
+						
+						if(lens <= 20 )
+						{
+							lens++; 
+							cout << (char)signal;
+							destination += (char)signal;
+						}
+					}
+			
+				}
+			else if(signal == BACKSPACE && lens >0)	 {
+				
+				cout << "\b" << " " << "\b";
+					destination.erase(destination.length() - 1, 1);
+					lens--;
+			}
+			
+			else if(signal == ESC) {
+				return;
+			}
+			else if(signal == ENTER){
+				return;
+			}
+			}
+			
+		}
+	}
+	
+}	
 

@@ -1,4 +1,4 @@
-int xKeyDisplay[] = { 1,20,45 };
+
 
 //const int so_item = 8;
 //const int dong =1;

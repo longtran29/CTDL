@@ -33,7 +33,7 @@ const int so_item = 9;
 #define DEL 83
 #define HOME 71
 #define BACKSPACE 8
-
+#define SPACE  32
 
 // Toa do phan huong dan
 #define x_hd 5

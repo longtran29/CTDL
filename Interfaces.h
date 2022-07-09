@@ -22,6 +22,8 @@ void MenuCenter() {
 	int vitri;
 	
 	
+	flightNode flightList;
+	
 	do {
 		
 		chon = MenuDong (thucdon);
@@ -34,7 +36,7 @@ void MenuCenter() {
 				break;
 				
 			case 2 :
-//				Xuat_DS_MB(planeList);
+				ManageFlightPlane(flightList);
 				break;
 			case 3:
 //				Chinh_Sua_MB(planeList);
