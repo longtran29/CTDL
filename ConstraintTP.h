@@ -6,11 +6,10 @@ void ConstraintLetterAndNumber(string &chuoi, int order, int width) {
 	gotoxy(x_add+width,order*3+y_add);
 	cout << chuoi;
 	int count = lenght;
-
-	bool quit = false;
-	while(!quit)
+	int signal;
+	while(true)
 	{
-			int signal = _getch();
+			signal = getch();
 			if(signal != 224 && signal != BACKSPACE && signal !=0) {
 			
 						if( ( 65 <= signal && signal <= 90 ) || ( 97 <= signal && signal <= 122 ) || ( 48 <= signal && signal <= 57 ) )
@@ -56,8 +55,7 @@ void ConstraintLetter(string &chuoi, int order, int width) {
 	cout << chuoi;
 	int count = lenght;
 
-	bool quit = false;
-	while(!quit)
+	while(true)
 	{
 			int signal = _getch();
 			if(signal != 224 && signal != BACKSPACE && signal !=0) {
@@ -101,8 +99,7 @@ void ConstraintLetter(string &chuoi, int order, int width) {
 void ConstraintNumber(int &num, int order, int width, int limitseats) {
 	gotoxy(x_add+width,order*3+y_add);
 	
-	bool quit = false;
-	while(!quit)
+	while(true)
 	{
 			int signal = _getch();
 			if(signal != 224 && signal != BACKSPACE && signal !=0) {
@@ -140,8 +137,6 @@ void ConstraintNumber(int &num, int order, int width, int limitseats) {
 	
 }
 	
-	
-	
 }
 
 void ConstraintsForLetterAndSpace(string &destination,int order,int width) {
@@ -155,35 +150,80 @@ void ConstraintsForLetterAndSpace(string &destination,int order,int width) {
 			while(true) {
 				signal = getch();
 				if(signal != 224 && signal != BACKSPACE && signal !=0 ) {
-				if( ( 65 <= signal && signal <= 90 ) || ( 97 <= signal && signal <= 122 ) || signal == SPACE)
-					{
-						
-						if(lens <= 20 )
+					if( ( 65 <= signal && signal <= 90 ) || ( 97 <= signal && signal <= 122 ) || signal == SPACE)
 						{
-							lens++; 
-							cout << (char)signal;
-							destination += (char)signal;
+							
+							if(lens <= 20 )
+							{
+								lens++; 
+								cout << (char)signal;
+								destination += (char)signal;
+							}
 						}
+							else if(signal == ESC) {
+								return;
+							}
+							else if(signal == ENTER){
+								return;
+							}
+			
 					}
-			
+				else if(signal == BACKSPACE && lens >0)	 {
+					
+					cout << "\b" << " " << "\b";
+						destination.erase(destination.length() - 1, 1);
+						lens--;
 				}
-			else if(signal == BACKSPACE && lens >0)	 {
-				
-				cout << "\b" << " " << "\b";
-					destination.erase(destination.length() - 1, 1);
-					lens--;
-			}
 			
-			else if(signal == ESC) {
-				return;
-			}
-			else if(signal == ENTER){
-				return;
-			}
+			
 			}
 			
 		}
 	}
 	
 }	
+
+void ConstraintForOnlyNumber(int &num,int order,int width ,int maxTicket) {
+	
+	gotoxy(x_add+width,order*3+y_add);
+	
+	while(true)
+	{
+			int signal = _getch();
+			if(signal != 224 && signal != BACKSPACE && signal !=0) {
+			
+						if(  48 <= signal && signal <= 57 )
+						{
+							
+							int result = signal - 48;
+							if(signal == 48) {
+								continue;	
+							}
+							else if((num*10+ result) <= maxTicket ) {
+								
+								num = num * 10 +result;
+								cout<<result;
+							
+							}
+						}
+						
+						else if(signal == ESC){
+							return ;
+							
+						
+							}
+						else if(signal == ENTER) {
+							return;
+						}
+					
+			}
+			else if(signal == BACKSPACE  ) {
+				cout << (char)BACKSPACE<<" "<<(char)BACKSPACE;
+				num /=10;
+			}
+					
+	
+}
+	
+}
 
