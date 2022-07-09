@@ -20,9 +20,7 @@ void MenuCenter() {
 	ReadAirplaneFile(planeList);
 	int chon = 0;
 	int vitri;
-	
-	
-	flightNode flightList;
+	PTR p= NULL; 
 	
 	do {
 		
@@ -36,7 +34,7 @@ void MenuCenter() {
 				break;
 				
 			case 2 :
-				ManageFlightPlane(flightList);
+				ManageFlightPlane(p);
 				break;
 			case 3:
 //				Chinh_Sua_MB(planeList);
