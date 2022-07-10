@@ -213,6 +213,7 @@ void ConstraintForOnlyNumber(int &num,int order,int width ,int maxTicket) {
 						
 							}
 						else if(signal == ENTER) {
+							
 							return;
 						}
 					
@@ -224,6 +225,56 @@ void ConstraintForOnlyNumber(int &num,int order,int width ,int maxTicket) {
 					
 	
 }
+	
+}
+
+
+void ConstraintForDateAndTime(int &result,int &dtOrder,int space , int limit) {
+	gotoxy(x_add + space + dtOrder * 3 +1 ,  9 + y_add);
+	if( result != 0 )
+		cout << result;
+	int num = result;
+	int count = 0;
+	
+	while(num > 0) {
+		count++;
+		num/=10;
+		
+	}
+	
+	int signal;
+	while(true) {
+		signal = getch();
+		
+		if(signal != 224 && signal != BACKSPACE && signal !=0) {
+			
+						if(  48 <= signal && signal <= 57 )
+						{
+							
+							int minus = signal - 48;
+							if(result > limit) {
+								continue;
+							}
+							else if((result*10+ minus) < limit ) {
+								
+								count++;
+								result = result *10 + minus;
+								cout<<minus;
+							
+							}
+						}
+					
+						else if(signal == ENTER) {
+							if (result > limit || result ==0 ) continue;
+							return;
+						}
+			}
+						else if(signal == BACKSPACE && count >0  ) {
+										cout << (char)BACKSPACE<<" "<<(char)BACKSPACE;
+										count--;
+										result /=10;
+						}
+	}
 	
 }
 
