@@ -5,7 +5,7 @@
 
 string ContentFlight[]= { "Ma Chuyen Bay","San Bay Den"	,"So Hieu May Bay","Thoi Gian Di","Tong So Ve","Trang Thai"};
 
-struct Flight {
+struct flight {
 
 	char flightCode[10];
 	char arrivalPlace[20];
@@ -18,29 +18,132 @@ struct Flight {
 
 };
 
+typedef struct flight Flight;
+
 // node trong list
-struct flightNode {
+struct FlightNode {
 	
 	Flight flight;
-	flightNode *pNext = NULL;
+	FlightNode *pNext = NULL; // con tro -> con tro
 };
 
-typedef  flightNode* PTR;
+typedef  FlightNode* PTR_FL;
 
+struct flightList {
 
-void addToListPlane(PTR &first, Flight cb ) {
+	PTR_FL pHead;
+	PTR_FL pTail;
 	
-	PTR p;
-   	p = new flightNode;
+};
+
+typedef struct flightList FlightList;
+
+void initFlightList(FlightList &FL) {
+
+	FL.pHead = NULL;
+	FL.pTail = NULL;
+}
 
 
-	if(first == NULL) {
-		p->flight = cb;
-		p->pNext = first;
-		first= p;
+PTR_FL createFlightNode(Flight data) {
+
+	PTR_FL nodeTemp = new FlightNode;
+	if(nodeTemp == NULL) {
+		
+		return NULL;	
 	}
 
+	nodeTemp->flight = data;
+	nodeTemp->pNext = NULL;
 }
+
+// them dau ds
+
+void addBeginningList(FlightList &FL, Flight data) {
+
+	PTR_FL nodeTemp = createFlightNode(data);
+	
+	if(FL.pHead = NULL) {
+		FL.pHead = FL.pTail = nodeTemp;
+	}
+	
+	else {
+		nodeTemp->pNext = FL.pHead;
+		FL.pHead = nodeTemp;
+	}
+	
+
+}
+
+void addEndList(FlightList &FL, Flight data) {
+		PTR_FL nodeTemp = createFlightNode(data);
+		if(FL.pTail == NULL) {
+			FL.pHead = FL.pTail = nodeTemp;
+		}
+	
+		else {
+			
+			FL.pTail->pNext = nodeTemp;
+			FL.pTail = nodeTemp;
+			
+		}
+	
+}
+
+void ShowFlight(Flight FL, int position) {
+	
+	int xKeyDisplay[7] = {1,20,45,63,80,95, 107};
+	
+
+	
+	gotoxy(xKeyDisplay[0] + 3, Y_Display + 3 + position*3);printf("%-15s",FL.flightCode);
+	gotoxy(xKeyDisplay[1] + 3, Y_Display + 3 + position*3);printf("%-18s",FL.arrivalPlace);
+	gotoxy(xKeyDisplay[2] + 3, Y_Display + 3 + position*3);printf("%-15s",FL.serialPlane);
+	gotoxy(xKeyDisplay[3] + 2, Y_Display + 3 + position*3);OutputDateTime(FL.departTime);
+	gotoxy(xKeyDisplay[4] + 6, Y_Display + 3 + position*3);printf("%-3d",FL.totalTicket);
+	gotoxy(xKeyDisplay[5] + 3, Y_Display + 3 + position*3);	
+	
+	switch(FL.status)
+	{
+	case 1: cout << "Huy     ";
+		break;
+	case 2: cout << "Con ve  ";
+		break;
+	case 3: cout << "Het ve  ";
+		break;
+	case 4: cout << "Hoan tat";
+		break;
+	default:
+		break;
+	}
+}
+
+void showFlightList(FlightList FL) {
+	
+	if( FL.pHead == NULL && FL.pTail == NULL) return;
+	
+	int count = 0;
+	
+	for(PTR_FL result = FL.pHead; result != NULL; result = result->pNext) {
+		
+		count++;
+		ShowFlight(result->flight,count);
+	}
+}
+
+//void addToListPlane(PTR &first, Flight cb ) {
+//	
+//	PTR p;
+//   	p = new flightNode;
+//
+//
+//	if(first == NULL) {
+//		p->flight = cb;
+//		p->pNext = first;
+//		first= p;
+//	}
+//
+//}
 
 void DateTimeInput(datetime &dt, int order) {
 	
@@ -81,7 +184,7 @@ void DateTimeInput(datetime &dt, int order) {
 
 }
 
-void Nhap_Chuyen_Bay(PTR &p) {
+void Nhap_Chuyen_Bay(FlightList &FL) {
 
 	ShowCur(true);
 	string ID;
@@ -92,7 +195,8 @@ void Nhap_Chuyen_Bay(PTR &p) {
 	int order = 0;
 	datetime DT;
 	int target;
-	while(true) {
+	bool quit = false;
+	while(!quit) {
 		switch(order) {
 			case 0:
 				ConstraintLetterAndNumber(ID,order,15);
@@ -154,12 +258,20 @@ void Nhap_Chuyen_Bay(PTR &p) {
 					strcpy(flight.flightCode, ID.c_str());
 					strcpy(flight.arrivalPlace, destination.c_str());
 					strcpy(flight.serialPlane, serialPlane.c_str());
-					flight.totalTicket = nTicket;
+					flight.departTime = DT;
 					flight.status = status;
-					flight.saleTotal = 0;
-					addToListPlane(p, flight);
+					flight.totalTicket = nTicket;
+					flight.saleTotal =0;
+					addEndList(FL, flight);
 				
+					ID = "";
+					destination = "";
+					serialPlane = "";
+					nTicket=0;
+					status =0;
+					order = 0;
 				}
+				quit = true;
 				break;
 			
 		}
@@ -171,7 +283,7 @@ void Nhap_Chuyen_Bay(PTR &p) {
 
 }
 
-void ManageFlightPlane(PTR &p) {
+void ManageFlightPlane(FlightList &FL) {
 	
 	system("cls");
 	
@@ -181,7 +293,7 @@ void ManageFlightPlane(PTR &p) {
 	
 	Display(ContentFlight,6);
 	int signal;
-	
+	int CurFlightPage = 1;
 
 	while(true) {
 		
@@ -197,9 +309,10 @@ void ManageFlightPlane(PTR &p) {
 					system("cls");
 					CreateForm(ContentFlight,6,27);
 					gotoxy(115 + 12,0 * 3 + 4);
-					Nhap_Chuyen_Bay(p);
-										
-										
+					Nhap_Chuyen_Bay(FL);
+//					TotalFlightPage = (int)ceil( (double)FL.SoLuongChuyenBay/NumberPerPage );
+//					ShowFlightListPerPage(FL,(CurFlightPage-1)/NumberPerPage);
+									
 				}
 				
 				

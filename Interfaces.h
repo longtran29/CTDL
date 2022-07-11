@@ -14,10 +14,12 @@ char thucdon [so_item][50] = {  "1.Quan Li Cac May Bay",
 
 void MenuCenter() {
 	
+	
 	ReadAirplaneFile(planeList);
 	int chon = 0;
 	int vitri;
-	PTR p= NULL; 
+	FlightList FL; 
+	initFlightList(FL);
 	
 	do {
 		
@@ -31,7 +33,7 @@ void MenuCenter() {
 				break;
 				
 			case 2 :
-				ManageFlightPlane(p);
+				ManageFlightPlane(FL);
 				break;
 			case 3:
 //				Chinh_Sua_MB(planeList);
