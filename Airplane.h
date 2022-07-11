@@ -280,11 +280,6 @@ void Nhap_MB(listPlane &list, bool editing= false, bool deleting = false) {
  				quit = true;
  				break;
  				
- 				
- 				
- 				
- 			
- 			
  			
 		 }
  		
