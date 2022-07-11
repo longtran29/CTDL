@@ -8,13 +8,13 @@ string ContentFlight[]= { "Ma Chuyen Bay","San Bay Den"	,"So Hieu May Bay","Thoi
 struct Flight {
 
 	char flightCode[10];
-//	char departTime[15];
 	char arrivalPlace[20];
-	int status;
+	datetime departTime;
 	char serialPlane[15];
+	int status;
 	int totalTicket;
 	int saleTotal;
-//	Ticket *TicketList;
+	Ticket *TicketList;
 
 };
 
@@ -92,6 +92,7 @@ void Nhap_Chuyen_Bay(PTR &p) {
 	int status = 0 ;
 	int order = 0;
 	datetime DT;
+	int target;
 	while(true) {
 		switch(order) {
 			case 0:
@@ -114,10 +115,15 @@ void Nhap_Chuyen_Bay(PTR &p) {
 				break;	
 			case 2:
 				ConstraintLetterAndNumber(serialPlane,order,17);
-				if(serialPlane == "") {
+				if( serialPlane == "") {
 					
 					BaoLoi(" Vui Long Khong Bo Trong ");
 					break;
+				}
+				target = Check_Trung(planeList,serialPlane.c_str());
+				if(target<0) {
+					BaoLoi(" So hieu may bay khong ton tai");	
+					break;			
 				}
 				order++;
 				break;	
