@@ -25,6 +25,9 @@ struct Plane {
 typedef struct Plane listPlane;
 
 
+	
+listPlane planeList;
+
 void WriteAirplaneToFile(listPlane &list)
 {
 	ofstream fileout;
@@ -299,7 +302,7 @@ void MenuManageAirplane(listPlane &list) {
 	
 	Display(titleDisplay,3);
 	Xuat_DS_MB(list, 0);
-	
+
 	
 	TotalPage = (int)ceil( (double)list.n/NumberPerPage );
 	CurrentPage = 1;
