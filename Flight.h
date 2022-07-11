@@ -33,6 +33,7 @@ struct flightList {
 
 	PTR_FL pHead;
 	PTR_FL pTail;
+	int SoLuongChuyenBay; // truong phu
 	
 };
 
@@ -55,6 +56,8 @@ PTR_FL createFlightNode(Flight data) {
 
 	nodeTemp->flight = data;
 	nodeTemp->pNext = NULL;
+	
+	return nodeTemp;
 }
 
 // them dau ds
@@ -131,6 +134,36 @@ void showFlightList(FlightList FL) {
 	}
 }
 
+
+void ShowFlightListPerPage(FlightList FL,int index) {
+	
+	gotoxy(1,2);
+	cout << " So luong chuyen bay : " << FL.SoLuongChuyenBay;
+	int count = -1;
+	
+	if(FL.pHead == NULL || FL.pTail == NULL) return;
+	int i=0;
+	
+	for(PTR_FL search= FL.pHead; search != NULL; search = search->pNext ) {
+		
+		if(count< NumberPerPage ) {
+		
+			
+			ShowFlight(search->flight,i++);
+			
+			count++;
+		
+		
+		}
+	
+	
+	}
+	
+	
+	
+}
+
+
 //void addToListPlane(PTR &first, Flight cb ) {
 //	
 //	PTR p;
@@ -195,8 +228,9 @@ void Nhap_Chuyen_Bay(FlightList &FL) {
 	int order = 0;
 	datetime DT;
 	int target;
-	bool quit = false;
-	while(!quit) {
+	
+ 	bool quit = false;
+ 	while(!quit) {
 		switch(order) {
 			case 0:
 				ConstraintLetterAndNumber(ID,order,15);
@@ -274,12 +308,11 @@ void Nhap_Chuyen_Bay(FlightList &FL) {
 				quit = true;
 				break;
 			
-		}
+		} //  end switch
 		
 		
-	}
-
-
+		
+	}// end while
 
 }
 
@@ -303,23 +336,25 @@ void ManageFlightPlane(FlightList &FL) {
 				return;
 			}
 			if (signal == 224) {
-				signal = getch();
+				signal = _getch();
 				
 				if(signal == INSERT) {
 					system("cls");
 					CreateForm(ContentFlight,6,27);
 					gotoxy(115 + 12,0 * 3 + 4);
 					Nhap_Chuyen_Bay(FL);
+					system("cls");
+					Display(ContentFlight,6);
 //					TotalFlightPage = (int)ceil( (double)FL.SoLuongChuyenBay/NumberPerPage );
-//					ShowFlightListPerPage(FL,(CurFlightPage-1)/NumberPerPage);
+					ShowFlightListPerPage(FL,(CurFlightPage-1)/NumberPerPage);
 									
 				}
-				
-				
-			}
-			else if(signal == DEL) {
+				else if(signal == DEL) {
 					return ;
 				}
+				
+			}
+			
 			
 	}
 	
