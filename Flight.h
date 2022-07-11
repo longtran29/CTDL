@@ -28,8 +28,6 @@ struct flightNode {
 typedef  flightNode* PTR;
 
 
-
-
 void addToListPlane(PTR &first, Flight cb ) {
 	
 	PTR p;
@@ -85,11 +83,12 @@ void DateTimeInput(datetime &dt, int order) {
 
 void Nhap_Chuyen_Bay(PTR &p) {
 
+	ShowCur(true);
 	string ID;
 	string destination;
 	string serialPlane;
 	int nTicket = 0 ;
-	int status = 0 ;
+	int status = 0 ; // luon con ve
 	int order = 0;
 	datetime DT;
 	int target;
@@ -135,8 +134,8 @@ void Nhap_Chuyen_Bay(PTR &p) {
 				
 			case 4:
 				ConstraintForOnlyNumber(nTicket,order,17,999);
-				if(nTicket<20) {
-					BaoLoi(" Khong hop le ");
+				if( nTicket < (planeList.planes[target])->seats   || nTicket<20) {
+					BaoLoi("So Ve khong phu hoi voi so cho tren may bay");
 					break;
 				}
 				order++;
