@@ -33,7 +33,7 @@ struct flightList {
 
 	PTR_FL pHead;
 	PTR_FL pTail;
-	int SoLuongChuyenBay; // truong phu
+	int SoLuongChuyenBay = 0; // truong phu
 	
 };
 
@@ -74,7 +74,7 @@ void addBeginningList(FlightList &FL, Flight data) {
 		nodeTemp->pNext = FL.pHead;
 		FL.pHead = nodeTemp;
 	}
-	
+	FL.SoLuongChuyenBay++;
 
 }
 
@@ -90,6 +90,7 @@ void addEndList(FlightList &FL, Flight data) {
 			FL.pTail = nodeTemp;
 			
 		}
+		FL.SoLuongChuyenBay++;
 	
 }
 
@@ -146,16 +147,18 @@ void ShowFlightListPerPage(FlightList FL,int index) {
 	
 	for(PTR_FL search= FL.pHead; search != NULL; search = search->pNext ) {
 		
-		if(count< NumberPerPage ) {
-		
+		count++; // thay doi con tro chay trong list
+		if(count == index) {
 			
-			ShowFlight(search->flight,i++);
+			int i = 0;
+			while(search != NULL && i< NumberPerPage) {
+				ShowFlight(search->flight,i++);
+				search = search->pNext;
 			
-			count++;
-		
-		
+			}
+			break;
 		}
-	
+		
 	
 	}
 	
