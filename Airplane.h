@@ -25,7 +25,6 @@ struct Plane {
 typedef struct Plane listPlane;
 
 
-	
 listPlane planeList;
 
 void WriteAirplaneToFile(listPlane &list)
@@ -138,12 +137,7 @@ void Display(string content[], int numContent) {
  
 
 void show_one_plane(DetailInfo *plane, int position) {
-	
-	// plane la con tro ->
-	
-//	cout<<"Gia tri";
-//	cout<<(*(plane)).serialPlane;
-	
+
 	gotoxy(x_Pos[0] + 3, Y_Display + 3 + position*3);printf("%-15s",plane->serialPlane);
 	gotoxy(x_Pos[1] + 3, Y_Display + 3 + position*3);printf("%-15s",plane->typePlane);
 	gotoxy(x_Pos[2] + 3, Y_Display + 3 + position*3);printf("%-15d",plane->seats);

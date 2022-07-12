@@ -14,7 +14,7 @@ using namespace std;
 #define MAX_SERIAL_PLANE 15
 #define MAX_TYPE_PLANE 40
 
-#define NumberPerPage 2
+#define NumberPerPage 6
 
 #define Y_Display 3
 
