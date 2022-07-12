@@ -14,7 +14,7 @@ using namespace std;
 #define MAX_SERIAL_PLANE 15
 #define MAX_TYPE_PLANE 40
 
-#define NumberPerPage 6
+#define NumberPerPage 2
 
 #define Y_Display 3
 
@@ -39,11 +39,16 @@ const int so_item = 9;
 #define x_hd 5
 #define y_hd 27
 // Toa do phan thong bao
-#define X_Notification 115
+#define X_Notification 30
 #define Y_Notification 26
 
+// Toa do xuat flight page
+#define X_Title 60
+#define Y_Title 1
 
-
+// Toa do in trang page
+#define X_Page 80
+#define Y_Page 26
 
 ///////////////
 #define x_add 25

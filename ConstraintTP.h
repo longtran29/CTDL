@@ -152,7 +152,6 @@ void ConstraintsForLetterAndSpace(string &destination,int order,int width) {
 				if(signal != 224 && signal != BACKSPACE && signal !=0 ) {
 					if( ( 65 <= signal && signal <= 90 ) || ( 97 <= signal && signal <= 122 ) || signal == SPACE)
 						{
-							
 							if(lens <= 20 )
 							{
 								lens++; 
@@ -160,14 +159,14 @@ void ConstraintsForLetterAndSpace(string &destination,int order,int width) {
 								destination += (char)signal;
 							}
 						}
-							else if(signal == ESC) {
-								return;
-							}
-							else if(signal == ENTER){
-								return;
-							}
-			
+					else if(signal == ESC) {
+						return;
 					}
+					else if(signal == ENTER){
+						return;
+					}
+			
+				}
 				else if(signal == BACKSPACE && lens >0)	 {
 					
 					cout << "\b" << " " << "\b";
