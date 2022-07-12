@@ -280,7 +280,7 @@ void WriteFlightToFile(FlightList &FL)
 	
 	if( fileout.is_open() )
 	{
-		fileout << FL.SoLuongChuyenBay << endl;
+		fileout << FL.SoLuongChuyenBay << endl; // in sl
 		for(  PTR_FL search = FL.pHead ; search != NULL ; search = search->pNext)
 		{
 			SaveFlight(search->flight,fileout);
@@ -293,6 +293,44 @@ void WriteFlightToFile(FlightList &FL)
 	}
 	fileout.close();
 }
+
+void ReadFlightFromFile(FlightList &FL) {
+	
+	ifstream filein;
+	filein.open("DSCB.TXT", ios_base::in);
+	
+	Flight F;
+	if(filein.is_open()) {
+		int sizeFlight;
+		filein>>sizeFlight;
+		
+		string temp;
+		getline(filein, temp);
+		
+		for(int i=0; i< sizeFlight; i++) {
+			if (strcmp(F.flightCode,"") == 0) break;
+			filein.getline(F.flightCode,15,'\n');
+			filein.getline(F.arrivalPlace,20,'\n');
+			filein.getline(F.serialPlane,15,'\n');
+			
+			filein >> F.departTime.gio;
+			filein >> F.departTime.phut;
+			filein >> F.departTime.ngay;
+			filein >> F.departTime.thang;
+			filein >> F.departTime.nam;
+			filein >> F.totalTicket;
+			filein >> F.status;
+			getline(filein,temp);
+			
+			addEndList(FL,F);
+		}
+		FL.SoLuongChuyenBay++;
+	}
+	filein.close();
+}
+
+
+
 
 void DateTimeInput(datetime &dt, int order) {
 	
@@ -459,6 +497,8 @@ void ManageFlightPlane(FlightList &FL) {
 	Display(ContentFlight,6);
 	int signal;
 	CurFlightPage = 1;
+	
+	ShowFlightListPerPage(FL,0);
 
 	while(true) {
 		
@@ -498,8 +538,6 @@ void ManageFlightPlane(FlightList &FL) {
 					gotoxy(115 + 12,0 * 3 + 4);
 					Nhap_Chuyen_Bay(FL, false, true);
 				}
-				
-				
 				
 			}
 			
