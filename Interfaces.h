@@ -14,12 +14,13 @@ char thucdon [so_item][50] = {  "1.Quan Li Cac May Bay",
 
 void MenuCenter() {
 	
-	
 	ReadAirplaneFile(planeList);
 	int chon = 0;
-	int vitri;
+//	int vitri;
 	FlightList FL; 
 	initFlightList(FL);
+	
+	ReadFlightFromFile(FL);
 	
 	do {
 		
