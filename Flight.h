@@ -159,6 +159,7 @@ void showFlightList(FlightList FL) {
 
 void ShowFlightListPerPage(FlightList FL,int index) {
 	
+	Display(ContentFlight,6);
 	gotoxy(1,2);
 	cout << " So luong chuyen bay : " << FL.SoLuongChuyenBay;
 	int count = -1;
@@ -185,6 +186,8 @@ void ShowFlightListPerPage(FlightList FL,int index) {
 }
 
 void ChangePageFlightPage(FlightList &FL) {
+	
+	system("cls");
 
 	gotoxy(1,2);
 	cout << " So luong chuyen bay : " << FL.SoLuongChuyenBay;
@@ -320,6 +323,9 @@ void ReadFlightFromFile(FlightList &FL) {
 			filein >> F.departTime.nam;
 			filein >> F.totalTicket;
 			filein >> F.status;
+			
+			if(filein == NULL) break;
+			
 			getline(filein,temp);
 			
 			addEndList(FL,F);
@@ -512,14 +518,14 @@ void ManageFlightPlane(FlightList &FL) {
 	
 	system("cls");
 	
-	gotoxy(40,1);
-
-	cout << " Quan ly chuyen bay ";
+//	gotoxy(40,1);
+//
+//	cout << " Quan ly chuyen bay ";
+//	
 	
-	Display(ContentFlight,6);
 	int signal;
 	CurFlightPage = 1;
-	
+	TotalFlightPage = (int)ceil( (double)FL.SoLuongChuyenBay/NumberPerPage );
 	ShowFlightListPerPage(FL,0);
 
 	while(true) {
@@ -532,11 +538,11 @@ void ManageFlightPlane(FlightList &FL) {
 			if (signal == 224) {
 				signal = _getch();
 				
-				if(signal == PAGE_UP && CurFlightPage>1) {
-				
-					CurFlightPage--;
-					ChangePageFlightPage(FL);
-				
+			
+				if(signal == PAGE_UP && CurFlightPage >1 ) {
+					
+						CurFlightPage--;
+						ChangePageFlightPage(FL);
 				}
 				else if(signal == PAGE_DOWN && CurFlightPage< TotalFlightPage) {
 					CurFlightPage++;

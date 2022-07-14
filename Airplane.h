@@ -404,7 +404,7 @@ void MenuManageAirplane(listPlane &list) {
 				
 				signal = _getch();
 				
-				if(signal == PAGE_UP && CurrentPage > 1) {
+				if(signal == PAGE_UP && CurrentPage > 0) {
 					
 					CurrentPage--;
 					Xuat_DS_MB(list,(CurrentPage-1)*CurrentPage);
