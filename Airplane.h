@@ -224,11 +224,12 @@ bool RemoveAirplane(listPlane &list, int vitri) {
 	
 	if(vitri<0) return false;
 	
-	for(int i = vitri; i< list.n; i++) {
+	for(int i = vitri; i< list.n-1; i++) {
 		list.planes[i] = list.planes[i+1];
 	}
 
 	list.n--;
+	WriteAirplaneToFile(list);
 	return true;
 }
 
@@ -252,7 +253,7 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 		int order = 0;
  		string ID;
  		string typePlane;
- 		int nchair = 0;
+ 		int nchair;
  		int target;
  	
  	bool quit = false;
@@ -284,6 +285,7 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 						}
 					if(target <0 && Edit) {
 						BaoLoi("ID not exists !");
+						break;
 					}						
 					if(Edit ) {
 						ID = list.planes[target]->serialPlane;
@@ -295,7 +297,7 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 						gotoxy(x_add+12,2*3+y_add); cout<< nchair;
 						
 					}
-					if(target < 0 && Edit == false) {
+					if(target > 0 && Edit == false) {
 					 
 					 	BaoLoi(" So hieu  trung trong ds ");
 						break;
@@ -341,16 +343,17 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 					cout << " Update successful ! ";
  					
 				 }
- 				{
- 					list.planes[list.n] = new DetailInfo;
- 					strcpy((list.planes[list.n]->serialPlane),ID.c_str());
-					strcpy((list.planes[list.n]->typePlane),typePlane.c_str());
-					list.planes[list.n]->seats = nchair;
-					list.n++;
-					gotoxy(X_Notification,Y_Notification+1);
-					cout << " Added ! ";
-				 }
-				 
+				 else
+	 				{
+	 					list.planes[list.n] = new DetailInfo;
+	 					strcpy((list.planes[list.n]->serialPlane),ID.c_str());
+						strcpy((list.planes[list.n]->typePlane),typePlane.c_str());
+						list.planes[list.n]->seats = nchair;
+						list.n++;
+						gotoxy(X_Notification,Y_Notification+1);
+						cout << " Added ! ";
+					 }
+					 
  				WriteAirplaneToFile(list);
 // 				system("cls");
 //				RemoveFormComplete();

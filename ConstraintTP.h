@@ -98,7 +98,7 @@ void ConstraintLetter(string &chuoi, int order, int width) {
 
 void ConstraintNumber(int &num, int order, int width, int limitseats) {
 	gotoxy(x_add+width,order*3+y_add);
-	cout<<num;
+	if (num > 0) cout<<num;
 	
 	while(true)
 	{
