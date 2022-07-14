@@ -320,8 +320,16 @@ bool removeHead(FlightList &FL) {
 
 bool removeAfter(FlightList &FL,PTR_FL temp) {
 	PTR_FL rmtemp = temp->pNext;
-	temp->pNext = rmtemp->pNext;
-	delete rmtemp;
+	temp->pNext = rmtemp->pNext; // null neu la phan tu cuoi cung
+	
+	if(rmtemp == FL.pTail) { // TH la con tro cuoi -> update PTail
+		delete rmtemp;
+		FL.pTail = temp;
+		
+	}
+	else {
+		delete rmtemp;
+	}
 	FL.SoLuongChuyenBay--;
 	WriteFlightToFile(FL);
 	return true;	
