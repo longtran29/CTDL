@@ -1,6 +1,6 @@
 #pragma once
 
-void ConstraintLetterAndNumber(string &chuoi, int order, int width) {
+void ConstraintLetterAndNumber(string &chuoi, int order,bool &Save, int width) {
 	int lenght = (int)chuoi.length();
 //	gotoxy(x_add + width,order * 3 + y_add);
 	gotoxy(x_add+width,order*3+y_add);
@@ -24,11 +24,13 @@ void ConstraintLetterAndNumber(string &chuoi, int order, int width) {
 						}
 						
 						else if(signal == ESC){
+							Save= false;
 							return ;
 							
 						
 							}
 						else if(signal == ENTER) {
+						
 							return;
 						}
 					
@@ -48,7 +50,7 @@ void ConstraintLetterAndNumber(string &chuoi, int order, int width) {
 }
 
 
-void ConstraintLetter(string &chuoi, int order, int width) {
+void ConstraintLetter(string &chuoi, int order, bool &Save,int width) {
 	int lenght = (int)chuoi.length();
 //	gotoxy(x_add + width,order * 3 + y_add);
 	gotoxy(x_add+width,order*3+y_add);
@@ -72,6 +74,7 @@ void ConstraintLetter(string &chuoi, int order, int width) {
 						}
 						
 						else if(signal == ESC){
+							Save = false;
 							return ;
 							
 						
@@ -96,7 +99,7 @@ void ConstraintLetter(string &chuoi, int order, int width) {
 }
 
 
-void ConstraintNumber(int &num, int order, int width, int limitseats) {
+void ConstraintNumber(int &num, int order,bool &Save, int width, int limitseats) {
 	gotoxy(x_add+width,order*3+y_add);
 	if (num > 0) cout<<num;
 	
@@ -121,6 +124,7 @@ void ConstraintNumber(int &num, int order, int width, int limitseats) {
 						}
 						
 						else if(signal == ESC){
+							Save = false;
 							return ;
 							
 						

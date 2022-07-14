@@ -383,12 +383,12 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 	datetime DT;
 	int target;
 	PTR_FL search;
-	
+	bool Save = true;
  	bool quit = false;
  	while(!quit) {
 		switch(order) {
 			case 0:
-				ConstraintLetterAndNumber(ID,order,15);
+				ConstraintLetterAndNumber(ID,order,Save,15);
 				if(ID == "") {
 					
 					BaoLoi(" Vui Long Khong Bo Trong ");
@@ -431,7 +431,7 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 				order++;
 				break;	
 			case 2:
-				ConstraintLetterAndNumber(serialPlane,order,17);
+				ConstraintLetterAndNumber(serialPlane,order,Save,17);
 				if( serialPlane == "") {
 					
 					BaoLoi(" Vui Long Khong Bo Trong ");

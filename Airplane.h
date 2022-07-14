@@ -159,7 +159,7 @@ void show_one_plane(DetailInfo *plane, int position) {
 
 void Xuat_DS_MB(listPlane list, int startIndex) {
 	
-	system("cls");
+//	system("cls");
 	Display(titleDisplay,3);
 	gotoxy(40,1);
 	cout<<"Danh sach may bay";
@@ -255,6 +255,7 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
  		string typePlane;
  		int nchair;
  		int target;
+ 		bool Save = true;
  	
  	bool quit = false;
  	while(!quit) {
@@ -263,7 +264,11 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
  			case 0 : // nhap cho so hieu mb
  				{
  					
- 					ConstraintLetterAndNumber(ID,order,12);
+ 					ConstraintLetterAndNumber(ID,order,Save,12);
+ 					if(!Save) {
+ 						RemoveFormComplete();
+ 						return;
+					 }
  					if(ID == "") {
 						BaoLoi(" Vui Long Khong Bo Trong ");
 						break;
@@ -307,9 +312,12 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 				 order++;
 				 break;
  			case 1: // nhap loai type
- 				ConstraintLetter(typePlane,order,12);
+ 				ConstraintLetter(typePlane,order,Save,12);
  				
- 				 				
+ 				 if(!Save) {
+ 						RemoveFormComplete();
+ 						return;
+					 }				
  				if(typePlane == "") {
 				 	
 				 	BaoLoi(" Vui Long Khong Bo Trong ");
@@ -321,8 +329,12 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
  				order++;	
  				break;
  			case 2: // nhap cho ngoi
- 				ConstraintNumber(nchair,order,12,999);
- 				
+ 				ConstraintNumber(nchair,order,Save,12,999);
+ 				if(!Save) {
+ 						RemoveFormComplete();
+ 						return;
+					 }
+					 
  				if(nchair <1) {
  					BaoLoi("Khong hop le");
 					break;
@@ -340,7 +352,7 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
  					strcpy(list.planes[target]->typePlane, typePlane.c_str());
  					list.planes[target]->seats = nchair;
  					gotoxy(X_Notification,Y_Notification+1);
-					cout << " Update successful ! ";
+					BaoLoi("Update successful!");
  					
 				 }
 				 else
@@ -350,13 +362,10 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 						strcpy((list.planes[list.n]->typePlane),typePlane.c_str());
 						list.planes[list.n]->seats = nchair;
 						list.n++;
-						gotoxy(X_Notification,Y_Notification+1);
-						cout << " Added ! ";
+						BaoLoi("Added successful!");
 					 }
-					 
+				RemoveFormComplete();
  				WriteAirplaneToFile(list);
-// 				system("cls");
-//				RemoveFormComplete();
  				quit = true;
  				break;
  				
