@@ -389,6 +389,9 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 		switch(order) {
 			case 0:
 				ConstraintLetterAndNumber(ID,order,Save,15);
+				if(!Save) {
+					return;
+				}
 				if(ID == "") {
 					
 					BaoLoi(" Vui Long Khong Bo Trong ");
@@ -422,7 +425,10 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 				order++;
 				break;
 			case 1:
-				ConstraintsForLetterAndSpace(destination,order,14);	
+				ConstraintsForLetterAndSpace(destination,Save,order,14);
+				if(!Save) {
+					return;
+				}	
 				if(destination == "") {
 					
 					BaoLoi(" Vui Long Khong Bo Trong ");
@@ -432,6 +438,9 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 				break;	
 			case 2:
 				ConstraintLetterAndNumber(serialPlane,order,Save,17);
+				if(!Save) {
+					return;
+				}
 				if( serialPlane == "") {
 					
 					BaoLoi(" Vui Long Khong Bo Trong ");
@@ -451,16 +460,23 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 				break;
 				
 			case 4:
-				ConstraintForOnlyNumber(nTicket,order,17,999);
+				ConstraintForOnlyNumber(nTicket,order,Save,17,999);
+				if(!Save) {
+					return;
+				}
 				if( nTicket < (planeList.planes[target])->seats   || nTicket<20) {
 					BaoLoi("So Ve khong phu hoi voi so cho tren may bay");
 					break;
 				}
+				
 				order++;
 				break;
 			case 5:
 				gotoxy(X_Notification+2,Y_Notification+1);cout <<"1 = Huy  2 = Con ve  3 = Het ve 4 = Hoan tat ";
-				ConstraintForOnlyNumber(status,order,17, 4);
+				if(!Save) {
+					return;
+				}
+				ConstraintForOnlyNumber(status,order,Save,17, 4);
 				order++;
 				break;
 			case 6:
@@ -553,5 +569,3 @@ void ManageFlightPlane(FlightList &FL) {
 	}
 	
 }
-
-

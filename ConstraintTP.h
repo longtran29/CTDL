@@ -144,7 +144,7 @@ void ConstraintNumber(int &num, int order,bool &Save, int width, int limitseats)
 	
 }
 
-void ConstraintsForLetterAndSpace(string &destination,int order,int width) {
+void ConstraintsForLetterAndSpace(string &destination,bool &Save,int order,int width) {
 	gotoxy(x_add+width,order*3+y_add);
 	int signal;
 	int lens = (int) destination.length();
@@ -165,7 +165,9 @@ void ConstraintsForLetterAndSpace(string &destination,int order,int width) {
 							}
 						}
 					else if(signal == ESC) {
+						Save = false;
 						return;
+						
 					}
 					else if(signal == ENTER){
 						return;
@@ -187,9 +189,10 @@ void ConstraintsForLetterAndSpace(string &destination,int order,int width) {
 	
 }	
 
-void ConstraintForOnlyNumber(int &num,int order,int width ,int maxTicket) {
+void ConstraintForOnlyNumber(int &num,int order,bool &Save,int width ,int maxTicket) {
 	
 	gotoxy(x_add+width,order*3+y_add);
+	if(num >0)  cout<< num;
 	
 	while(true)
 	{
@@ -212,6 +215,7 @@ void ConstraintForOnlyNumber(int &num,int order,int width ,int maxTicket) {
 						}
 						
 						else if(signal == ESC){
+							Save = false;
 							return ;
 							
 						
