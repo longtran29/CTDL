@@ -100,6 +100,18 @@ int Check_Trung(listPlane &list, const char *serialNum) {
 }
 
 
+void RemoveFormComplete()
+{
+	system("color 0E");
+	for( int i = 0 ; i < 20 ; i++)
+	{
+		gotoxy(x_add - 2 , y_add - 1 + i );
+		printf("%-32s", " ");
+	}
+	//ShowCur(false);
+}
+
+
 void Display(string content[], int numContent) {
 	
 	
@@ -147,6 +159,8 @@ void show_one_plane(DetailInfo *plane, int position) {
 
 void Xuat_DS_MB(listPlane list, int startIndex) {
 	
+	system("cls");
+	Display(titleDisplay,3);
 	gotoxy(40,1);
 	cout<<"Danh sach may bay";
 	gotoxy(1,2);
@@ -155,7 +169,7 @@ void Xuat_DS_MB(listPlane list, int startIndex) {
 	
 	for(int i=0; i +startIndex < list.n && i< NumberPerPage; i++) {
 		
-		show_one_plane(list.planes[i],i);
+		show_one_plane(list.planes[i+startIndex],i);
 		
 	}
 	
@@ -191,6 +205,32 @@ void CreateForm(string content[], int numContent, int length) {
 
 }
 
+int FindIndexAirplane(listPlane LA, const char *ma) {
+
+
+	for(int i=0; i< LA.n; i++) {
+	
+		if(strcmp(LA.planes[i]->serialPlane, ma) ==0 ) {
+			return i;		
+		}
+	
+	}
+	return -1;
+
+
+}
+
+bool RemoveAirplane(listPlane &list, int vitri) {
+	
+	if(vitri<0) return false;
+	
+	for(int i = vitri; i< list.n; i++) {
+		list.planes[i] = list.planes[i+1];
+	}
+
+	list.n--;
+	return true;
+}
 
 //void Nhap_DS_MB(listPlane &list ) {
 //	DetailInfo plane;
@@ -207,12 +247,13 @@ void CreateForm(string content[], int numContent, int length) {
 //}
 
 
-void Nhap_MB(listPlane &list, bool editing= false, bool deleting = false) {
+void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 	
 		int order = 0;
  		string ID;
  		string typePlane;
  		int nchair = 0;
+ 		int target;
  	
  	bool quit = false;
  	while(!quit) {
@@ -226,7 +267,35 @@ void Nhap_MB(listPlane &list, bool editing= false, bool deleting = false) {
 						BaoLoi(" Vui Long Khong Bo Trong ");
 						break;
 					 }
- 					if(Check_Trung(list, ID.c_str()) >=0) {
+					 target = FindIndexAirplane(list,ID.c_str());
+					 if(Del) {
+					
+								if(!RemoveAirplane(list,FindIndexAirplane(list,ID.c_str())) ){
+								
+									BaoLoi("Fail !");
+								
+								}
+								else {
+									BaoLoi("Success !");
+								}
+								
+								return;
+					
+						}
+					if(target <0 && Edit) {
+						BaoLoi("ID not exists !");
+					}						
+					if(Edit ) {
+						ID = list.planes[target]->serialPlane;
+						typePlane = list.planes[target]->typePlane;
+						nchair = list.planes[target]->seats;
+						
+						gotoxy(x_add+12,0*3+y_add); cout<< ID;
+						gotoxy(x_add+12,1*3+y_add); cout<< typePlane;
+						gotoxy(x_add+12,2*3+y_add); cout<< nchair;
+						
+					}
+					if(target < 0 && Edit == false) {
 					 
 					 	BaoLoi(" So hieu  trung trong ds ");
 						break;
@@ -238,12 +307,15 @@ void Nhap_MB(listPlane &list, bool editing= false, bool deleting = false) {
  			case 1: // nhap loai type
  				ConstraintLetter(typePlane,order,12);
  				
+ 				 				
  				if(typePlane == "") {
 				 	
 				 	BaoLoi(" Vui Long Khong Bo Trong ");
 					break;
 				 
 				 }
+				 
+			
  				order++;	
  				break;
  			case 2: // nhap cho ngoi
@@ -260,6 +332,15 @@ void Nhap_MB(listPlane &list, bool editing= false, bool deleting = false) {
 				order++;
  				break;
  			case 3:
+ 				if(Edit)  {
+ 					
+ 					strcpy(list.planes[target]->serialPlane, ID.c_str());
+ 					strcpy(list.planes[target]->typePlane, typePlane.c_str());
+ 					list.planes[target]->seats = nchair;
+ 					gotoxy(X_Notification,Y_Notification+1);
+					cout << " Update successful ! ";
+ 					
+				 }
  				{
  					list.planes[list.n] = new DetailInfo;
  					strcpy((list.planes[list.n]->serialPlane),ID.c_str());
@@ -267,10 +348,12 @@ void Nhap_MB(listPlane &list, bool editing= false, bool deleting = false) {
 					list.planes[list.n]->seats = nchair;
 					list.n++;
 					gotoxy(X_Notification,Y_Notification+1);
-					cout << " Them thanh cong ";
+					cout << " Added ! ";
 				 }
 				 
  				WriteAirplaneToFile(list);
+// 				system("cls");
+//				RemoveFormComplete();
  				quit = true;
  				break;
  				
@@ -289,8 +372,9 @@ void Nhap_MB(listPlane &list, bool editing= false, bool deleting = false) {
  
 void MenuManageAirplane(listPlane &list) {
 	
-	Display(titleDisplay,3);
+	
 	Xuat_DS_MB(list, 0);
+	
 
 	
 	TotalPage = (int)ceil( (double)list.n/NumberPerPage );
@@ -316,7 +400,7 @@ void MenuManageAirplane(listPlane &list) {
 				else if (signal == PAGE_DOWN && CurrentPage < TotalPage) {
 					CurrentPage++;
 					
-					Xuat_DS_MB(list,(CurrentPage-1)*CurrentPage);	
+					Xuat_DS_MB(list,(CurrentPage-1)*NumberPerPage);	
 				}
 			
 				else if(signal == INSERT) {
@@ -329,24 +413,38 @@ void MenuManageAirplane(listPlane &list) {
 						system("cls");
 						CreateForm(titleDisplay,3,27);
 						gotoxy(115 + 12,0 * 3 + 4);
-						Nhap_MB(list);
-						system("cls");
+						Nhap_MB(list, false, false);
 						TotalPage = (int) ceil((double)list.n/NumberPerPage);
 						Xuat_DS_MB(list, (CurrentPage-1)*NumberPerPage);
 						
 					}
 				
-				
+			
 				} 
+			
 				else if(signal == DEL) {
-					return ;
+					system("cls");
+					CreateForm(titleDisplay,3,27);
+					gotoxy(115 + 12,0 * 3 + 4);
+					Nhap_MB(list,false,true);
+					system("cls");
+					TotalPage = (int) ceil((double)list.n/NumberPerPage);
+					Xuat_DS_MB(list, (CurrentPage-1)*NumberPerPage);
 				}
 				
-			
-		
+				else if(signal == HOME) {
+					system("cls");
+					CreateForm(titleDisplay,3,27);
+					gotoxy(115 + 12,0 * 3 + 4);
+					Nhap_MB(list,true,false);
+					TotalPage = (int) ceil((double)list.n/NumberPerPage);
+					Xuat_DS_MB(list, (CurrentPage-1)*NumberPerPage);
+					
+					
+				}
 			}
 			
-
+			
 		}
 	}
 		
