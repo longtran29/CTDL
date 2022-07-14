@@ -427,6 +427,8 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 				
 				if(search != NULL && Edit) {
 					
+					
+					
 					gotoxy(x_add + 16, 0 * 3 + y_add);cout << search->flight.flightCode;
 					gotoxy(x_add + 16, 1 * 3 + y_add);cout << search->flight.arrivalPlace;
 					gotoxy(x_add + 16, 2 * 3 + y_add);cout << search->flight.serialPlane;
