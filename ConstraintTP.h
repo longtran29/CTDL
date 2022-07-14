@@ -146,6 +146,7 @@ void ConstraintNumber(int &num, int order,bool &Save, int width, int limitseats)
 
 void ConstraintsForLetterAndSpace(string &destination,bool &Save,int order,int width) {
 	gotoxy(x_add+width,order*3+y_add);
+	cout<< destination;
 	int signal;
 	int lens = (int) destination.length();
 	while(true) {

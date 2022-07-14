@@ -207,7 +207,7 @@ PTR_FL findFlight(FlightList FL, const char *ID) {
 	if(FL.pHead == NULL) return NULL;
 	for(PTR_FL search = FL.pHead; search != NULL; search = search->pNext) {
 		
-		if(strcmp(search->flight.flightCode, ID) ==0) return search;
+		if(strcmp(search->flight.flightCode, ID) == 0 ) return search;
 	}
 	return NULL;
 	
@@ -405,6 +405,8 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 				}
 
 				
+				search = findFlight(FL,ID.c_str());	
+				
 				if(Del) {
 					
 					RemoveFormComplete();
@@ -421,9 +423,25 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 					}
 						
 				}	
+						
 				
-				search = findFlight(FL,ID.c_str());		
-				if(search != NULL) {
+				if(search != NULL && Edit) {
+					
+					gotoxy(x_add + 16, 0 * 3 + y_add);cout << search->flight.flightCode;
+					gotoxy(x_add + 16, 1 * 3 + y_add);cout << search->flight.arrivalPlace;
+					gotoxy(x_add + 16, 2 * 3 + y_add);cout << search->flight.serialPlane;
+					gotoxy(x_add + 16, 3 * 3 + y_add);OutputDateTime(search->flight.departTime);
+					gotoxy(x_add + 16, 4 * 3 + y_add);cout << search->flight.totalTicket;
+					gotoxy(x_add + 16, 5 * 3 + y_add);cout << search->flight.status;
+				
+				
+				}
+				else {
+				
+					BaoLoi("Khong tim thay ma nay");
+					break;
+				}
+				if(search != NULL && Edit == false) {
 				
 						BaoLoi(" ID exists ! ");
 						break;
@@ -470,7 +488,7 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 				if(!Save) {
 					return;
 				}
-				if( nTicket < (planeList.planes[target])->seats   || nTicket<20) {
+				if( nTicket > (planeList.planes[target])->seats   || nTicket<20) {
 					BaoLoi("So Ve khong phu hoi voi so cho tren may bay");
 					break;
 				}
@@ -567,6 +585,16 @@ void ManageFlightPlane(FlightList &FL) {
 					Nhap_Chuyen_Bay(FL, false, true);
 					TotalFlightPage = (int)ceil( (double)FL.SoLuongChuyenBay/NumberPerPage );
 					ShowFlightListPerPage(FL,(CurFlightPage-1)/NumberPerPage);
+				}
+				
+				else if(signal == HOME) {
+					system("cls");
+					CreateForm(ContentFlight,6,27);
+					gotoxy(115 + 12,0 * 3 + 4);
+					Nhap_Chuyen_Bay(FL,true, false);
+					TotalFlightPage = (int)ceil( (double)FL.SoLuongChuyenBay/NumberPerPage );
+					ShowFlightListPerPage(FL,(CurFlightPage-1)/NumberPerPage);
+					
 				}
 				
 			}
