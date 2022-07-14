@@ -398,13 +398,19 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 				
 				if(Del) {
 					
+					RemoveFormComplete();
+					
 					// xoa chuyen bay theo ID
 					if(!DeleteFlightById(FL, ID.c_str())) {
 						gotoxy(X_Notification, Y_Notification    );cout <<" Fail !";
 					}
-					else
+					else {
+					
 						gotoxy(X_Notification, Y_Notification    );cout <<" Successful !";
 					return;
+					
+					}
+						
 				}	
 				
 				search = findFlight(FL,ID.c_str());		
@@ -537,6 +543,8 @@ void ManageFlightPlane(FlightList &FL) {
 					CreateForm(ContentFlight,6,27);
 					gotoxy(115 + 12,0 * 3 + 4);
 					Nhap_Chuyen_Bay(FL, false, true);
+					TotalFlightPage = (int)ceil( (double)FL.SoLuongChuyenBay/NumberPerPage );
+					ShowFlightListPerPage(FL,(CurFlightPage-1)/NumberPerPage);
 				}
 				
 			}
