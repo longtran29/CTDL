@@ -229,7 +229,7 @@ bool RemoveAirplane(listPlane &list, int vitri) {
 	}
 
 	list.n--;
-	WriteAirplaneToFile(list);
+//	WriteAirplaneToFile(list);
 	return true;
 }
 
@@ -365,7 +365,7 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 						BaoLoi("Added successful!");
 					 }
 				RemoveFormComplete();
- 				WriteAirplaneToFile(list);
+// 				WriteAirplaneToFile(list);
  				quit = true;
  				break;
  				

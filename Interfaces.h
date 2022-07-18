@@ -21,9 +21,9 @@ void MenuCenter() {
 	initFlightList(FL);
 	
 	ReadFlightFromFile(FL);
+	bool Exit =false;
 	
-	do {
-		
+	while (!Exit) {
 		chon = MenuDong (thucdon);
 
 		clrscr();
@@ -44,15 +44,53 @@ void MenuCenter() {
 				break;
 			case 5:
 				break;
+			case so_item:
+				WriteFlightToFile(FL);
+				WriteAirplaneToFile(planeList);
+				Exit = true;
+				break;
+				
 			
 			
 			
 		}
 		
-		
 	}
-	while(1);
 	
+//	do {
+//		
+//		chon = MenuDong (thucdon);
+//
+//		clrscr();
+//		switch(chon) {
+//				
+//			case 1:
+//				MenuManageAirplane(planeList);
+//				break;
+//				
+//			case 2 :
+//				ManageFlightPlane(FL);
+//				break;
+//			case 3:
+////				Chinh_Sua_MB(planeList);
+//				break;
+//			case 4:
+////				SaveFile(planeList, filename);
+//				break;
+//			case 5:
+//				break;
+//			case so_item:
+//				
+//				break;
+//			
+//			
+//			
+//		}
+//		
+//		
+//	}
+//	while(1);
+//	
 	
 	
 	}

@@ -331,7 +331,7 @@ bool removeAfter(FlightList &FL,PTR_FL temp) {
 		delete rmtemp;
 	}
 	FL.SoLuongChuyenBay--;
-	WriteFlightToFile(FL);
+//	WriteFlightToFile(FL);
 	return true;	
 }
 
@@ -544,7 +544,7 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 					flight.saleTotal =0;
 					flight.saleTotal = 0;
 					addEndList(FL, flight);
-					WriteFlightToFile(FL);
+//					WriteFlightToFile(FL);
 					ID = "";
 					destination = "";
 					serialPlane = "";
