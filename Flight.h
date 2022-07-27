@@ -84,7 +84,7 @@ void addBeginningList(FlightList &FL, Flight data) {
 
 void addEndList(FlightList &FL, Flight data) {
 		PTR_FL nodeTemp = createFlightNode(data);
-		if(FL.pHead == NULL) {
+		if(FL.pTail == NULL) {
 			FL.pHead = FL.pTail = nodeTemp;
 		}
 	

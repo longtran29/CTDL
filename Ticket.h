@@ -3,7 +3,8 @@
 struct Ticket {
 	
 
-	int CMND;	
+	int CMND;
+	int Status;	
 	
 	
 };

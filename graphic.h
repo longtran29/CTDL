@@ -19,8 +19,8 @@ void ShowCur(bool CursorVisibility)
 }
 
 void HighLight () {
-//	SetColor(15); 
-	system("Color F3");// system("Color F3"); F for background color and 3 for text color
+	SetColor(15); 
+//	system("Color F3");// system("Color F3"); F for background color and 3 for text color
 	SetBGColor(1);
 }
 
@@ -38,7 +38,7 @@ void BaoLoi (char *s){
 
 
 int MenuDong(char td [so_item][50]){
-	Normal(15,0);
+Normal(15,0);
   clrscr();
   int chon =0;
   

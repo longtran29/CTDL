@@ -34,6 +34,10 @@ const int so_item = 9;
 #define HOME 71
 #define BACKSPACE 8
 #define SPACE  32
+#define KEY_UP 72// 0
+#define KEY_DOWN 80
+#define KEY_LEFT 75
+#define KEY_RIGHT 77
 
 // Toa do phan huong dan
 #define x_hd 5
@@ -43,15 +47,22 @@ const int so_item = 9;
 #define Y_Notification 26
 
 // Toa do xuat flight page
-#define X_Title 60
+#define X_Title 20
 #define Y_Title 1
 
 // Toa do in trang page
 #define X_Page 80
 #define Y_Page 26
 
+// toa do seat ticket
+#define X_Ticket 20
+#define Y_Ticket 8
+
+
 ///////////////
 #define x_add 25
 #define y_add 4
+
+// 
 
 

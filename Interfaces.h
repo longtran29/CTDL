@@ -12,16 +12,20 @@ char thucdon [so_item][50] = {  "1.Quan Li Cac May Bay",
 					   "0. Thoat chuong trinh"};
 			          
 
-void MenuCenter() {
+
+
+void MenuCenter(){
 	
 	ReadAirplaneFile(planeList);
 	int chon = 0;
-//	int vitri;
-	FlightList FL; 
 	initFlightList(FL);
 	
 	ReadFlightFromFile(FL);
+	CreateAVLTree(root);
 	bool Exit =false;
+	
+	
+	
 	
 	while (!Exit) {
 		chon = MenuDong (thucdon);
@@ -37,7 +41,7 @@ void MenuCenter() {
 				ManageFlightPlane(FL);
 				break;
 			case 3:
-//				Chinh_Sua_MB(planeList);
+				BookTicket(root);
 				break;
 			case 4:
 //				SaveFile(planeList, filename);
@@ -56,41 +60,5 @@ void MenuCenter() {
 		}
 		
 	}
-	
-//	do {
-//		
-//		chon = MenuDong (thucdon);
-//
-//		clrscr();
-//		switch(chon) {
-//				
-//			case 1:
-//				MenuManageAirplane(planeList);
-//				break;
-//				
-//			case 2 :
-//				ManageFlightPlane(FL);
-//				break;
-//			case 3:
-////				Chinh_Sua_MB(planeList);
-//				break;
-//			case 4:
-////				SaveFile(planeList, filename);
-//				break;
-//			case 5:
-//				break;
-//			case so_item:
-//				
-//				break;
-//			
-//			
-//			
-//		}
-//		
-//		
-//	}
-//	while(1);
-//	
-	
-	
+
 	}
