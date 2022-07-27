@@ -13,7 +13,7 @@ struct flight {
 	char arrivalPlace[20];
 	datetime departTime;
 	char serialPlane[15];
-	int status;
+	int status; // 1: huy chuyen 2:con ve 3:het ve 4:hoan tat
 	int totalTicket;
 	int saleTotal;
 	Ticket *TicketList;
@@ -40,6 +40,8 @@ struct flightList {
 };
 
 typedef struct flightList FlightList;
+
+FlightList FL; 
 
 void initFlightList(FlightList &FL) {
 
