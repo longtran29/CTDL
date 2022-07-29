@@ -5,6 +5,7 @@
 
 int TotalFlightPage = 0;
 int CurFlightPage;
+
 string ContentFlight[]= { "Ma Chuyen Bay","San Bay Den"	,"So Hieu May Bay","Thoi Gian Di","Tong So Ve","Trang Thai"};
 
 struct flight {
@@ -14,9 +15,9 @@ struct flight {
 	datetime departTime;
 	char serialPlane[15];
 	int status; // 1: huy chuyen 2:con ve 3:het ve 4:hoan tat
-	int totalTicket;
-	int saleTotal;
-	Ticket *TicketList;
+	int totalTicket; // so luong ve cho chuyen bay
+	int saleTotal; // tong so ve da ban duoc
+	Ticket *TicketList= new Ticket[100]; // danh sách ve dã bán 
 
 };
 
@@ -602,7 +603,7 @@ void ManageFlightPlane(FlightList &FL) {
 				
 				if(signal == INSERT) {
 					system("cls");
-					CreateForm(ContentFlight,6,27);
+					CreateForm(ContentFlight,0,6,27);
 					gotoxy(115 + 12,0 * 3 + 4);
 					Nhap_Chuyen_Bay(FL, false, false);
 					system("cls");
@@ -613,7 +614,7 @@ void ManageFlightPlane(FlightList &FL) {
 				}
 				else if(signal == DEL) {
 					system("cls");
-					CreateForm(ContentFlight,6,27);
+					CreateForm(ContentFlight,0,6,27);
 					gotoxy(115 + 12,0 * 3 + 4);
 					Nhap_Chuyen_Bay(FL, false, true);
 					TotalFlightPage = (int)ceil( (double)FL.SoLuongChuyenBay/NumberPerPage );
@@ -622,7 +623,7 @@ void ManageFlightPlane(FlightList &FL) {
 				
 				else if(signal == HOME) {
 					system("cls");
-					CreateForm(ContentFlight,6,27);
+					CreateForm(ContentFlight,0,6,27);
 					gotoxy(115 + 12,0 * 3 + 4);
 					Nhap_Chuyen_Bay(FL,true, false);
 					TotalFlightPage = (int)ceil( (double)FL.SoLuongChuyenBay/NumberPerPage );

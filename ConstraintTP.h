@@ -288,3 +288,56 @@ void ConstraintForDateAndTime(int &result,int &dtOrder,int space , int limit) {
 	
 }
 
+void ConstraintForOnlyGender(int &result, int order, bool &Save,int width) {
+	
+	gotoxy(x_add + width, y_add+ order*3);
+	if(result !=0 ) cout<< result;
+	
+	int count = 0;
+	
+	while(true) {
+		
+			int signal = getch();
+			if(signal != 224 && signal != SPACE) {
+			
+				if(48<=signal && signal <=49) {
+					
+					int sub = signal -48;
+					
+					if(-1< result*10+sub && result*10+sub<2) {
+					
+						cout<<sub;
+						count++;
+						result = result*10+sub;
+					}
+				}
+				
+				else if(signal == ESC) {
+				
+					Save = false;
+					return;
+				}
+				
+				else if(signal == 8 && count >=0) {
+					cout << (char)BACKSPACE<<" "<<(char)BACKSPACE;
+					
+					result /=10;
+					count--;
+				
+				}
+				else if(signal == ENTER) {
+					if(result>1) continue;
+					
+					return;
+				
+				}
+			
+			}
+	
+	}
+	
+}
+
+
+
+

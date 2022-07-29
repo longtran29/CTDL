@@ -23,6 +23,7 @@ const int so_item = 9;
 #define horizonMenu 40
 #define vertiMenu 8
 
+#define MAX_VE 200
 
 // =============== Macro key ===================
 #define ESC 27

@@ -190,11 +190,11 @@ void CreateRow(int x, int y, string content, int length) {
 }
 
 
-void CreateForm(string content[], int numContent, int length) {
+void CreateForm(string content[],int startIdx, int numContent, int length) {
 	
 	int y = y_add;
 	
-	for(int i=0; i< numContent; i++) {
+	for(int i=startIdx; i< numContent; i++) {
 	
 		
 		CreateRow(x_add,y,content[i], length);
@@ -423,7 +423,7 @@ void MenuManageAirplane(listPlane &list) {
 					}
 					else {
 						system("cls");
-						CreateForm(titleDisplay,3,27);
+						CreateForm(titleDisplay,0,3,27);
 						gotoxy(115 + 12,0 * 3 + 4);
 						Nhap_MB(list, false, false);
 						TotalPage = (int) ceil((double)list.n/NumberPerPage);
@@ -436,7 +436,7 @@ void MenuManageAirplane(listPlane &list) {
 			
 				else if(signal == DEL) {
 					system("cls");
-					CreateForm(titleDisplay,3,27);
+					CreateForm(titleDisplay,0,3,27);
 					gotoxy(115 + 12,0 * 3 + 4);
 					Nhap_MB(list,false,true);
 					system("cls");
@@ -446,7 +446,7 @@ void MenuManageAirplane(listPlane &list) {
 				
 				else if(signal == HOME) {
 					system("cls");
-					CreateForm(titleDisplay,3,27);
+					CreateForm(titleDisplay,0,3,27);
 					gotoxy(115 + 12,0 * 3 + 4);
 					Nhap_MB(list,true,false);
 					TotalPage = (int) ceil((double)list.n/NumberPerPage);
