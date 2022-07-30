@@ -432,7 +432,7 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 
 				
 				search = findFlight(FL,ID.c_str());	
-				target = FindIndexFlight(FL, ID.c_str());
+//				target = FindIndexFlight(FL, ID.c_str());
 				
 				if(Del) {
 					
@@ -450,31 +450,25 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 				}	
 						
 				
-				if(search != NULL && Edit) {
-					
-//					ID = search->flight.flightCode;
-//					destination = search->flight.arrivalPlace;
-//					serialPlane = search->flight.serialPlane;	
-//					nTicket = search->flight.totalTicket;	
-//					status = search->flight.status;			
-//					DT = search->flight.departTime;
-					
-					
-					
-					gotoxy(x_add + 15, 0 * 3 + y_add);cout <<  search->flight.flightCode;
-					gotoxy(x_add + 15, 1 * 3 + y_add);cout << search->flight.arrivalPlace;
-					gotoxy(x_add + 15, 2 * 3 + y_add);cout << search->flight.serialPlane;
-					gotoxy(x_add + 15, 3 * 3 + y_add);OutputDateTime(search->flight.departTime);
-					gotoxy(x_add + 15, 4 * 3 + y_add);cout << search->flight.totalTicket;
-					gotoxy(x_add + 15, 5 * 3 + y_add);cout << search->flight.status;
+				if(search != NULL && Edit == false) { // them chuyen bay moi
+							
+					BaoLoi("ID da ton tai, vui long nhap ID khac");break;
 				
 				
 				}
+				else if(search == NULL && Edit == true) {
+					BaoLoi("ID can sua khong ton tai");break;
+				}
 				
-				if(search != NULL && Edit == false) {
 				
-						BaoLoi(" ID exists ! ");
-						break;
+				if(Edit) {
+				
+					gotoxy(x_add + 16, 0 * 3 + y_add);cout <<  search->flight.flightCode;
+					gotoxy(x_add + 16, 1 * 3 + y_add);cout << search->flight.arrivalPlace;
+					gotoxy(x_add + 16, 2 * 3 + y_add);cout << search->flight.serialPlane;
+					gotoxy(x_add + 16, 3 * 3 + y_add);OutputDateTime(search->flight.departTime);
+					gotoxy(x_add + 16, 4 * 3 + y_add);cout << search->flight.totalTicket;
+					gotoxy(x_add + 16, 5 * 3 + y_add);cout << search->flight.status;
 				}
 				order++;
 				break;
