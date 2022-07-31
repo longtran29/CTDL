@@ -54,11 +54,11 @@ void ReadAirplaneFile(listPlane &list)
 {
 	ifstream filein;
 	filein.open("DSMB.TXT", ios_base::in);// ios_base::in la de doc
- string lines[3];
- string line;
- string serial; string type;
- int i=0;
- int seat;
+	 string lines[3];
+	 string line;
+	 string serial; string type;
+	 int i=0;
+	 int seat;
 
 	if( filein.is_open() )
 	{
@@ -113,10 +113,8 @@ void RemoveFormComplete()
 
 
 void Display(string content[], int numContent) {
-	
-	
-// mau vang
-	system("color 0E");
+
+	system("color 0E"); // mau vang
 	Normal(14,0);
 	for(int i=0; i< numContent; i++) {
 		gotoxy(x_Pos[i] + 3, 4);
@@ -158,8 +156,7 @@ void show_one_plane(DetailInfo *plane, int position) {
 }
 
 void Xuat_DS_MB(listPlane list, int startIndex) {
-	
-//	system("cls");
+	system("cls"); // clear de xoa dsmb old
 	Display(titleDisplay,3);
 	gotoxy(40,1);
 	cout<<"Danh sach may bay";
@@ -167,7 +164,7 @@ void Xuat_DS_MB(listPlane list, int startIndex) {
 	cout << " So luong may bay : " <<list.n;
 	
 	
-	for(int i=0; i +startIndex < list.n && i< NumberPerPage; i++) {
+	for(int i=0; i + startIndex < list.n && i< NumberPerPage; i++) {
 		
 		show_one_plane(list.planes[i+startIndex],i);
 		
@@ -178,8 +175,7 @@ void Xuat_DS_MB(listPlane list, int startIndex) {
 
 void ChangePage(listPlane list) {
 	
-	
-	
+	Display(titleDisplay,3);	
 	Xuat_DS_MB(list, (CurrentPage-1)* NumberPerPage);
 }
 
@@ -273,26 +269,38 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 						BaoLoi(" Vui Long Khong Bo Trong ");
 						break;
 					 }
-					 target = FindIndexAirplane(list,ID.c_str());
+					
+					 
 					 if(Del) {
 					
 								if(!RemoveAirplane(list,FindIndexAirplane(list,ID.c_str())) ){
 								
-									BaoLoi("Fail !");
+									BaoLoi("ID not exists . Delete Fail !");
 								
 								}
 								else {
-									BaoLoi("Success !");
+									BaoLoi("Delete Success !");
 								}
 								
 								return;
 					
 						}
-					if(target <0 && Edit) {
+						
+					target = FindIndexAirplane(list,ID.c_str());
+				
+					
+					
+					
+					if(target >-1 && Edit == false) { // khong them duoc
+					 	BaoLoi("ID da ton tai. Nhap ID khac");
+					 	break;
+					}	
+					
+					if(target <0 && Edit) { // khong chinh sua duoc
 						BaoLoi("ID not exists !");
 						break;
-					}						
-					if(Edit ) {
+					}		
+					if(Edit){
 						ID = list.planes[target]->serialPlane;
 						typePlane = list.planes[target]->typePlane;
 						nchair = list.planes[target]->seats;
@@ -302,12 +310,7 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 						gotoxy(x_add+12,2*3+y_add); cout<< nchair;
 						
 					}
-					if(target > 0 && Edit == false) {
-					 
-					 	BaoLoi(" So hieu  trung trong ds ");
-						break;
-					 
-					 }
+				
 				 }
 				 order++;
 				 break;
@@ -346,7 +349,7 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 				order++;
  				break;
  			case 3:
- 				if(Edit)  {
+ 				if(Edit)  { // edit airplane
  					
  					strcpy(list.planes[target]->serialPlane, ID.c_str());
  					strcpy(list.planes[target]->typePlane, typePlane.c_str());
@@ -355,7 +358,7 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 					BaoLoi("Update successful!");
  					
 				 }
-				 else
+				 else // them moi
 	 				{
 	 					list.planes[list.n] = new DetailInfo;
 	 					strcpy((list.planes[list.n]->serialPlane),ID.c_str());
@@ -375,7 +378,7 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
  		
  		
 	 }
-	
+//	ShowCur(false);
 	
 }
  	
@@ -384,8 +387,8 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
  
 void MenuManageAirplane(listPlane &list) {
 	
-	
-	Xuat_DS_MB(list, 0);
+	ShowCur(false);
+	Xuat_DS_MB(list, 0); // xuat danh sach tu phan tu thu 0
 	
 
 	
@@ -404,15 +407,14 @@ void MenuManageAirplane(listPlane &list) {
 				
 				signal = _getch();
 				
-				if(signal == PAGE_UP && CurrentPage > 0) {
+				if(signal == PAGE_UP && CurrentPage > 1) {
 					
 					CurrentPage--;
-					Xuat_DS_MB(list,(CurrentPage-1)*CurrentPage);
+					ChangePage(list);
 				}
 				else if (signal == PAGE_DOWN && CurrentPage < TotalPage) {
 					CurrentPage++;
-					
-					Xuat_DS_MB(list,(CurrentPage-1)*NumberPerPage);	
+					ChangePage(list);	
 				}
 			
 				else if(signal == INSERT) {
@@ -422,13 +424,14 @@ void MenuManageAirplane(listPlane &list) {
 						return;
 					}
 					else {
+						ShowCur(true);
 						system("cls");
 						CreateForm(titleDisplay,0,3,27);
 						gotoxy(115 + 12,0 * 3 + 4);
 						Nhap_MB(list, false, false);
 						TotalPage = (int) ceil((double)list.n/NumberPerPage);
 						Xuat_DS_MB(list, (CurrentPage-1)*NumberPerPage);
-						
+
 					}
 				
 			
