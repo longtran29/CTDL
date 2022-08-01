@@ -7,6 +7,7 @@ int TotalFlightPage = 0;
 int CurFlightPage;
 
 string ContentFlight[]= { "Ma Chuyen Bay","San Bay Den"	,"So Hieu May Bay","Thoi Gian Di","Tong So Ve","Trang Thai"};
+string InsertContentFL[]= { "Ma Chuyen Bay","San Bay Den"	,"So Hieu May Bay","Trang Thai","Thoi Gian Di"};
 
 struct flight {
 
@@ -99,16 +100,6 @@ void addEndList(FlightList &FL, Flight data) {
 	
 }
 
-int FindIndexFlight(FlightList FL, const char * ID) {
-	int index = 0;
-	if(FL.pHead == NULL) return NULL;
-	for(PTR_FL search = FL.pHead; search != NULL; search = search->pNext) {
-		
-		if(strcmp(search->flight.flightCode, ID) == 0 ) return index;
-		index++;
-	}
-	return -1;
-}
 
 void SaveFlight( Flight &F,ofstream &fileout)
 {
@@ -121,7 +112,7 @@ void SaveFlight( Flight &F,ofstream &fileout)
 	fileout << F.departTime.thang<< endl;
 	fileout << F.departTime.nam << endl;
 	fileout << F.totalTicket << endl;
-	//fileout << F.TongSoDaBan << endl;
+
 	fileout << F.status << endl;
 //	SaveTicketListOfOneFlight(F);
 }
@@ -188,22 +179,7 @@ void ReadFlightFromFile(FlightList &FL) {
 }
 
 
-//int FindIndexFL(FlightList FL, const char *ID) {
-//
-//	int index = 0;
-//	for(PTR_FL search = FL.pHead; search != NULL; search = search->pNext) {
-//	
-//		if(strcmp(search->flight.flightCode, ID) ==0) {
-//			return index;
-//		}
-//		index++;
-//			
-//	
-//	}
-//	
-//	return -1;
-//
-//}
+
 
 void ShowFlight(Flight FL, int position) {
 	
@@ -361,9 +337,6 @@ bool DeleteFlightById(FlightList &FL, const char * ID) {
 }
 
 
-
-
-
 void DateTimeInput(datetime &dt, int order) {
 	
 	gotoxy(x_add + 13 + 2 , order * 3 + y_add);
@@ -410,7 +383,7 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 	string destination;
 	string serialPlane;
 	int nTicket = 0 ;
-	int status = 0 ; // luon con ve
+	int status = 2 ; // luon con ve
 	int order = 0;
 	datetime DT;
 	int target;
@@ -420,7 +393,7 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
  	while(!quit) {
 		switch(order) {
 			case 0:
-				ConstraintLetterAndNumber(ID,order,Save,15);
+				ConstraintLetterAndNumber(ID,order,Save,16);
 				if(!Save) {
 					return;
 				}
@@ -432,8 +405,8 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 
 				
 				search = findFlight(FL,ID.c_str());	
-//				target = FindIndexFlight(FL, ID.c_str());
 				
+			
 				if(Del) {
 					
 					// xoa chuyen bay theo ID
@@ -462,10 +435,13 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 				
 				
 				if(Edit) {
-				
-					gotoxy(x_add + 16, 0 * 3 + y_add);cout <<  search->flight.flightCode;
-					gotoxy(x_add + 16, 1 * 3 + y_add);cout << search->flight.arrivalPlace;
-					gotoxy(x_add + 16, 2 * 3 + y_add);cout << search->flight.serialPlane;
+					
+					destination =  search->flight.arrivalPlace;
+					serialPlane = search->flight.serialPlane;
+					ID =  search->flight.flightCode;
+					gotoxy(x_add + 16, 0 * 3 + y_add);cout << ID;
+					gotoxy(x_add + 16, 1 * 3 + y_add);cout << destination;
+					gotoxy(x_add + 16, 2 * 3 + y_add);cout << serialPlane;
 					gotoxy(x_add + 16, 3 * 3 + y_add);OutputDateTime(search->flight.departTime);
 					gotoxy(x_add + 16, 4 * 3 + y_add);cout << search->flight.totalTicket;
 					gotoxy(x_add + 16, 5 * 3 + y_add);cout << search->flight.status;
@@ -473,7 +449,7 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 				order++;
 				break;
 			case 1:
-				ConstraintsForLetterAndSpace(destination,Save,order,15);
+				ConstraintsForLetterAndSpace(destination,Save,order,16);
 				if(!Save) {
 					return;
 				}	
@@ -495,58 +471,47 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 					break;
 				}
 				target = Check_Trung(planeList,serialPlane.c_str());
+				
 				if(target<0) {
 					BaoLoi(" So hieu may bay khong ton tai");	
 					break;			
 				}
-				order++;
+				order++;	
 				break;	
 			case 3:
-				InitDataTime(DT);
-				DateTimeInput(DT, order);
+				gotoxy(x_add+12,3*3+y_add);cout<<"Con ve";
 				order++;
 				break;
-				
 			case 4:
-				ConstraintForOnlyNumber(nTicket,order,Save,17,999);
-				if(!Save) {
-					return;
-				}
-				if( nTicket > (planeList.planes[target])->seats   || nTicket<20) {
-					BaoLoi("So Ve khong phu hoi voi so cho tren may bay");
-					break;
-				}
+			
+//				InitDataTime(DT);
+				struct DateTime DT;
+				{
+					DT = { ngay:0, thang:0, nam:0, gio:0, phut:0};
+					DateTimeInput(DT, order);
+					if(!checkValidDT(DT)) {BaoLoi("Thoi gian khong hop le");
+								 gotoxy(x_add + 13, 4 * 3 + y_add); printf("%-33s", " "); break;}
 				
+				}
 				order++;
 				break;
+				
+		
 			case 5:
-				gotoxy(X_Notification+2,Y_Notification+1);cout <<"1 = Huy  2 = Con ve  3 = Het ve 4 = Hoan tat ";
-				if(!Save) {
-					return;
-				}
-				ConstraintForOnlyNumber(status,order,Save,17, 4);
-				order++;
-				break;
-			case 6:
-				
-				 
 				{
 					Flight flight;
 					strcpy(flight.flightCode, ID.c_str());
 					strcpy(flight.arrivalPlace, destination.c_str());
 					strcpy(flight.serialPlane, serialPlane.c_str());
 					flight.departTime = DT;
-					flight.status = status;
-					flight.totalTicket = nTicket;
-					flight.saleTotal =0;
+					flight.status = 2;
+					flight.totalTicket = planeList.planes[target]->seats;
 					flight.saleTotal = 0;
 					addEndList(FL, flight);
 //					WriteFlightToFile(FL);
 					ID = "";
 					destination = "";
 					serialPlane = "";
-					nTicket=0;
-					status =0;
 					order = 0;
 				}
 				quit = true;
@@ -562,17 +527,10 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 void ManageFlightPlane(FlightList &FL) {
 	
 	system("cls");
-	
-//	gotoxy(40,1);
-//
-//	cout << " Quan ly chuyen bay ";
-//	
-	
 	int signal;
 	CurFlightPage = 1;
 	TotalFlightPage = (int)ceil( (double)FL.SoLuongChuyenBay/NumberPerPage );
 	ShowFlightListPerPage(FL,0);
-//	ShowCursor(false);
 
 	while(true) {
 		
@@ -597,7 +555,7 @@ void ManageFlightPlane(FlightList &FL) {
 				
 				if(signal == INSERT) {
 					system("cls");
-					CreateForm(ContentFlight,0,6,27);
+					CreateForm(InsertContentFL,0,5,27);
 					gotoxy(115 + 12,0 * 3 + 4);
 					Nhap_Chuyen_Bay(FL, false, false);
 					system("cls");
