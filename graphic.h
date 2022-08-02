@@ -27,10 +27,10 @@ void HighLight () {
 
 void BaoLoi (char *s){
   int x=wherex() , y=wherey();
-  gotoxy (10,24);
+  gotoxy (10,27);
   cout <<s;
   Sleep(2000);
-  gotoxy(10,24);
+  gotoxy(10,27);
   clreol();
   gotoxy(x,y);
 }

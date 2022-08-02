@@ -22,6 +22,7 @@ void MenuCenter(){
 	
 	ReadFlightFromFile(FL);
 	CreateAVLTree(root);
+	LoadPassengerFromFile(root);
 	bool Exit =false;
 	
 	
@@ -44,13 +45,16 @@ void MenuCenter(){
 				BookTicket(root);
 				break;
 			case 4:
-//				SaveFile(planeList, filename);
+				CancelFlightTicket(root);
 				break;
 			case 5:
+				WatchPassengerList(root);
 				break;
 			case so_item:
+				
 				WriteFlightToFile(FL);
 				WriteAirplaneToFile(planeList);
+				SavePassengerToFile(root);
 				Exit = true;
 				break;
 				

@@ -169,7 +169,9 @@ void Xuat_DS_MB(listPlane list, int startIndex) {
 		show_one_plane(list.planes[i+startIndex],i);
 		
 	}
-	
+
+		gotoxy(X_Page, Y_Page);
+	cout <<"Trang "<< CurrentPage << "/" << TotalPage;
 
 }
 
@@ -371,15 +373,13 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 // 				WriteAirplaneToFile(list);
  				quit = true;
  				break;
- 				
- 			
+ 		
 		 }
  		
  		
  		
 	 }
-//	ShowCur(false);
-	
+
 }
  	
  
@@ -388,12 +388,14 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 void MenuManageAirplane(listPlane &list) {
 	
 	ShowCur(false);
+	CurrentPage = 1;
+	TotalPage = (int)ceil( (double)list.n/NumberPerPage );
 	Xuat_DS_MB(list, 0); // xuat danh sach tu phan tu thu 0
 	
 
 	
-	TotalPage = (int)ceil( (double)list.n/NumberPerPage );
-	CurrentPage = 1;
+	
+	
 	int signal;
 	
 	while(true) {
@@ -455,16 +457,12 @@ void MenuManageAirplane(listPlane &list) {
 					TotalPage = (int) ceil((double)list.n/NumberPerPage);
 					Xuat_DS_MB(list, (CurrentPage-1)*NumberPerPage);
 					
-					
 				}
 			}
 			
 			
 		}
 	}
-		
-
-
 }
 
 

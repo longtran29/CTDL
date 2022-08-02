@@ -268,7 +268,7 @@ void ConstraintForDateAndTime(int &result,int &dtOrder,int space , int limit) {
 							if(result > limit) {
 								continue;
 							}
-							else if((result*10+ minus) < limit ) {
+							else if((result*10+ minus) <= limit ) {
 								
 								count++;
 								result = result *10 + minus;
