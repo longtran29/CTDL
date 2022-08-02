@@ -103,6 +103,9 @@ void addEndList(FlightList &FL, Flight data) {
 }
 
 
+
+
+
 void SaveTicketListOfOneFlight(Flight &F) { // save flight 's ticket to file
 
 	
@@ -163,6 +166,28 @@ void WriteFlightToFile(FlightList &FL)
 	fileout.close();
 }
 
+void ReadTicketListOfOneFlight(Flight &F) {
+	
+	ifstream file;
+	char filenameve[50] = "DSV\\";
+	strcat(filenameve, F.flightCode);
+	strcat(filenameve, ".TXT");
+
+	file.open(filenameve, ios_base::in);
+	if (file.is_open()) 
+	{
+		file >> F.saleTotal;
+		F.TicketList = new Ticket[F.saleTotal];
+
+		for (int i = 0; i < F.saleTotal; i++)
+		{
+			file >> F.TicketList[i].CMND;
+			file >> F.TicketList[i].Status;
+		}
+	}
+	file.close();
+}
+
 void ReadFlightFromFile(FlightList &FL) {
 	
 	ifstream filein;
@@ -193,7 +218,7 @@ void ReadFlightFromFile(FlightList &FL) {
 			if(filein == NULL) break;
 			
 			getline(filein,temp);
-			
+			ReadTicketListOfOneFlight(F);
 			addEndList(FL,F);
 		}
 		FL.SoLuongChuyenBay++;
