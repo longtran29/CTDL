@@ -16,9 +16,11 @@ struct flight {
 	datetime departTime;
 	char serialPlane[15];
 	int status; // 1: huy chuyen 2:con ve 3:het ve 4:hoan tat
+	Ticket *TicketList= new Ticket[100]; // danh sách ve dã bán 
+	
 	int totalTicket; // so luong ve cho chuyen bay
 	int saleTotal; // tong so ve da ban duoc
-	Ticket *TicketList= new Ticket[100]; // danh sách ve dã bán 
+	
 
 };
 
@@ -101,6 +103,27 @@ void addEndList(FlightList &FL, Flight data) {
 }
 
 
+void SaveTicketListOfOneFlight(Flight &F) { // save flight 's ticket to file
+
+	
+	ofstream file;
+	char filenameve[50] = "DSV\\";
+	strcat(filenameve, F.flightCode);
+	strcat(filenameve, ".TXT");
+	file.open(filenameve,ios_base::out);
+	if( file.is_open() )
+	{
+		file << F.saleTotal << endl;
+		for( int i = 0; i < F.saleTotal ;i++)
+		{
+			file << F.TicketList[i].CMND << endl;
+			file << F.TicketList[i].Status << endl;
+		}
+	}
+	file.close();
+	
+}
+
 void SaveFlight( Flight &F,ofstream &fileout)
 {
 	fileout << F.flightCode << endl;
@@ -114,7 +137,7 @@ void SaveFlight( Flight &F,ofstream &fileout)
 	fileout << F.totalTicket << endl;
 
 	fileout << F.status << endl;
-//	SaveTicketListOfOneFlight(F);
+	SaveTicketListOfOneFlight(F);
 }
 
 
