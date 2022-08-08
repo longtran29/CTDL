@@ -103,6 +103,13 @@ void ConstraintNumber(int &num, int order,bool &Save, int width, int limitseats)
 	gotoxy(x_add+width,order*3+y_add);
 	if (num > 0) cout<<num;
 	
+	int count= 0; // backspace fn
+	
+	do {
+		num /= 10;
+		count++;
+	} while(num!=0);
+	
 	while(true)
 	{
 			int signal = _getch();
@@ -134,9 +141,10 @@ void ConstraintNumber(int &num, int order,bool &Save, int width, int limitseats)
 						}
 					
 			}
-			else if(signal == BACKSPACE  ) {
+			else if(signal == BACKSPACE && count >0 ) {
 				cout << (char)BACKSPACE<<" "<<(char)BACKSPACE;
 				num /=10;
+				count--;
 			}
 					
 	

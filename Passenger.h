@@ -251,46 +251,6 @@ void LoadPassengerFromFile(AVLTree &root) {
 	
 }
 
-void WatchPassengerList(AVLTree root) {
-	system("color 0E");
-	gotoxy(X_Title, Y_Title);
-	cout << "Nhap ma chuyen bay de xem ds : ";
-	CreateForm(ContentFlight,0,1,35);
-	bool Save = true;
-	int order = 0;
-	FlightNode* currentFlight = NULL;
-	string result;
-	bool quit = false;
-	
-	while(!quit) {
-		ConstraintLetterAndNumber(result, order, Save,15);
-		if(Save == false) {
-			 RemoveFormComplete(); return;
-		}
-		currentFlight = findFlight(FL, result.c_str());
-		if(currentFlight == NULL) {
-			BaoLoi("So hieu mb khong tt");
-			
-		}
-		else {
-			quit = true;
-			RemoveFormComplete();
-		}
-		
-	}
-		gotoxy(X_Title, Y_Title);
-	cout << "Danh sach co ma chuyen bay:" << currentFlight->flight.flightCode <<" toi " << currentFlight->flight.arrivalPlace;
-	cout<< " khoi hanh luc "; OutputDateTime(currentFlight->flight.departTime);
-	
-	WatchPassengerFlight(root,currentFlight->flight);
-	
-	
-	
-	
-	
-	
-}
-
 void TicketSlot(int x, int y, int pos, int status) {
 	
 	SetColor(14);// yellow
@@ -300,7 +260,6 @@ void TicketSlot(int x, int y, int pos, int status) {
 	cout << char(176) << setw(3) << setfill(char(176)) << char(176) << char(176);
 	gotoxy(x, y);
 	cout << char(176) << setw(3) << setfill('0')<<pos<<char(176);
-	//printf("%-5d",text);
 	/*ve duong ke ben duoi cua cai ve*/
 	gotoxy(x,y+1);
 	if (status == 1) {
@@ -310,7 +269,7 @@ void TicketSlot(int x, int y, int pos, int status) {
 
 }
 
-void TicketSlotTable(Flight F) {
+void TicketSlotTable(Flight F) { // dashboard tiket slot
 	int x = X_Ticket+ 8;
 	int y = Y_Ticket + 5;
 	
@@ -358,7 +317,7 @@ void ChangeTicket(int pos) {
 
 
 
-int ChooseTicket(Flight F) {
+int ChooseTicket(Flight F) { // dash
 	ShowCur(false);
 	CurPosTicket = 1;
 	CurPosPreTicket = 1;
@@ -420,7 +379,7 @@ int ChooseTicket(Flight F) {
 
 
 
-void CreatePassenger(AVLTree &root, bool Edit, bool Del, int ID) {
+void CreatePassenger(AVLTree &root, bool Edit, bool Del, int ID) { // nhap new in4 passenger
 	bool Save = true;
 	
 	int order = 1;
@@ -441,9 +400,7 @@ void CreatePassenger(AVLTree &root, bool Edit, bool Del, int ID) {
 			case 1 : // input ho
 				{
 					ConstraintsForLetterAndSpace(firstName,Save,order,12);
-					if(Save == false) {
-						return ;
-					}
+					if(Save == false)  { RemoveFormComplete(); return;}
 					
 					if(firstName == "")	{
 						BaoLoi("Khong bo trong");
@@ -455,7 +412,7 @@ void CreatePassenger(AVLTree &root, bool Edit, bool Del, int ID) {
 			case 2: // ten
 				{
 					ConstraintLetter(lastName,order,Save, 12);
-					if(Save == false) return;
+					if(Save == false)  { RemoveFormComplete(); return;}
 					
 					if(lastName ==  "") BaoLoi("Khong bo trong");
 					
@@ -468,7 +425,7 @@ void CreatePassenger(AVLTree &root, bool Edit, bool Del, int ID) {
 				{
 					ConstraintForOnlyGender(gender,order,Save,12);
 			
-					if(Save == false ) return;
+					if(Save == false ) { RemoveFormComplete(); return;}
 					if(gender == -1) BaoLoi("Khong bo trong");
 					
 					order++;
@@ -495,18 +452,156 @@ void CreatePassenger(AVLTree &root, bool Edit, bool Del, int ID) {
 				break;
 			
 		}
-		
-		
-		
-		
-		
+	
+	}
+	
+}
+
+void DisplayList(string content[], int nContent, int count) { // display content
+	
+	system("color 0E");
+	SetColor(14);
+	SetBGColor(0);
+	for(int i=0; i< nContent; i++) {
+		gotoxy(xKeyDisplay[i], Y_Display);
+		cout<<content[i];
 	}
 	
 	
+}
+
+void showPassenger(Passenger psg, int pos) { // show 1 hanh khach tu ds ve
 	
+	int temp_Y = Y_Display+3;
+	
+	gotoxy(xKeyDisplay[0], temp_Y+ pos*3);printf("%-5d" ,pos+1);
+	gotoxy(xKeyDisplay[1], temp_Y+ pos*3);printf("%-12d", psg.CMND);
+	gotoxy(xKeyDisplay[2], temp_Y+ pos*3);printf("%-20s", psg.Surname);
+	gotoxy(xKeyDisplay[3], temp_Y+ pos*3);printf("%-10s", psg.Name);
+	gotoxy(xKeyDisplay[4], temp_Y+ pos*3);
+	if(psg.Gender == 1) cout<<"Nam"; else cout<<"Nu";
+
+
+}
+
+void showPassengerOfFlight(AVLTree root,Flight curFlight) { // ham show ds ve 1 chuyen bay
+	
+	ShowCur(false);
+	DisplayList(ContentPassenger,5,curFlight.saleTotal);
+	for(int i=0; i< curFlight.saleTotal; i++) {
+	
+		PassengerNode *temp = findPassenger(root,curFlight.TicketList[i].CMND);
+		if(temp == NULL) continue;
+		showPassenger(temp->data,i);
+	}
+}
+
+void WatchPassengerList(AVLTree root) { // xem danh sach ve cac chuyen bay theo macb
+	system("cls");
+	system("color 0E");
+	gotoxy(X_Title, Y_Title);
+	cout << "Vui long nhap ma chuyen bay : ";
+	CreateForm(ContentFlight,0,1,10);
+	int order = 0;
+	bool Save = true;
+	string result;
+	PTR_FL currentFlight = NULL; 
+	bool quit = false;
+	while(!quit) {
+		ConstraintLetterAndNumber(result,order,Save, 15);
+		if(Save == false)  { RemoveFormComplete(); return;}
+		
+		currentFlight = findFlight(FL, result.c_str());
+		if(currentFlight == NULL) {
+			 BaoLoi("MaCB khong ton tai");
+		}
+		else {
+			RemoveFormComplete();
+			quit = true;
+		}
+	}
+	
+		gotoxy(X_Title, Y_Title);
+			cout << " Danh sach hanh khach co ma chuyen bay " << currentFlight->flight.flightCode << " toi " << currentFlight->flight.arrivalPlace<< " luc ";
+			OutputDateTime(currentFlight->flight.departTime);
+			
+	showPassengerOfFlight(root, currentFlight->flight);
+	
+	int signal;
+	while(true) {
+		while( _kbhit() )
+			{
+				signal = _getch();
+				if( signal == ESC )
+				{
+					return;
+				}
+			}
+	}
+}
+
+
+void CancelFlightTicket(AVLTree root) { // huy ve mb
+	system("cls");
+	gotoxy(X_Title, Y_Title);
+	cout << "Nhap ma chuyen bay de kiem tra : ";
+	string IDFlight;
+	CreateForm(ContentFlight, 0,1,0);
+	bool quit = false;
+	bool Save = true;
+	int order = 0;
+	FlightNode *currentFL = NULL;
+	
+	while(!quit) {
+		
+		system("color 0E");
+		ConstraintLetterAndNumber(IDFlight, order, Save, 15);
+		if(Save == false) return;
+		
+		currentFL = findFlight(FL,IDFlight.c_str());
+		if(currentFL == NULL) BaoLoi("CB khong ton tai");
+		else {
+			if(currentFL->flight.status== 1)
+			{
+				BaoLoi("Chuyen bay da HUY hoac HOAN TAT");
+				continue;
+			}
+			else {
+				system("cls");
+				quit = true;
+			}
+		}
+	
+	}
+	
+	gotoxy(X_Title, Y_Title);
+	cout << "Nhap CMND de kiem tra  ";
+	CreateForm(ContentPassenger,1,2,0);
+	
+	int IDPsg = 0; int target = -1;
+	while(true) {
+		ConstraintNumber(IDPsg,order,Save,12,99999);
+		if(Save == false) return;
+		
+		for(int i=0; i< currentFL->flight.saleTotal; i++) if(currentFL->flight.TicketList[i].CMND == IDPsg) { // check ds cac ve da dat
+			target = i;
+			break;
+		}
+		
+		if(target == -1) { BaoLoi("Khong tim thay trong DSV ");
+		}
+		else break;
+	}	
+	
+	for(int i=target; i< currentFL->flight.saleTotal-1; i++) {  // xoa tai vi tri target
+		currentFL->flight.TicketList[i] = currentFL->flight.TicketList[i+1];
+	}
+	currentFL->flight.saleTotal--;
+	BaoLoi("Xoa thanh cong");
 	
 	
 }
+
 
 
 
@@ -515,8 +610,8 @@ void BookTicket(AVLTree &root) {
 	system("cls");
 	system("color 0E");
 	gotoxy(X_Title, Y_Title);
-	cout << "Vui long nhap ma chuyen bay : ";
-	
+	cout << "Vui long nhap ma chuyen bay  ";
+	CreateForm(ContentFlight, 0, 1,0);
 	bool flag = false;
 	int order = 0;
 	bool Save = true;
@@ -525,31 +620,28 @@ void BookTicket(AVLTree &root) {
 	bool quit = false;
 	
 	while(flag == false ) {
-		ConstraintLetterAndNumber(result,order,Save, 12);
+		ConstraintLetterAndNumber(result,order,Save, 15);
 		if(Save == false) {
 			return;
 		}
 		
 		currentFlight = findFlight(FL, result.c_str());
 		
-		if(currentFlight == NULL) BaoLoi("Chuyen bay khong ton tai");
+		if(currentFlight == NULL) BaoLoi("CB khong ton tai ");
 		
 		else {
 			if(currentFlight->flight.status == 1 || currentFlight->flight.status ==4 ||currentFlight->flight.status ==3) {
 				
-				BaoLoi("Chuyen bay da huy or hoan tat, vui long nhap lai ");
-//				continue;
-			}
+				BaoLoi("Chuyen bay da HUY hoac HOAN TAT hoac HET VE, vui long nhap lai ");
+				continue;
+			} 
 			flag = true;
 		
 	}
-	
-	
 }
 		system("cls");
 		
-		
-		while(!quit) {
+		while(true) {
 			
 			gotoxy(X_Title, Y_Title);
 			cout << " Danh sach hanh khach co ma chuyen bay " << currentFlight->flight.flightCode << " toi " << currentFlight->flight.arrivalPlace<< " luc ";
@@ -570,14 +662,19 @@ void BookTicket(AVLTree &root) {
 			
 			
 			system("color 0E");
-			cout<<"Nhap CMND :";
+			cout<<"Nhap CMND -> ";
 			int IDHanhKhach = 0; int target = -1;
 			
-			CreateForm(ContentPassenger,1,5,30);			
+			CreateForm(ContentPassenger,1,2,30);			
 		
 			ConstraintForOnlyNumber(IDHanhKhach, order, Save, 12, 999999);
 			
-			if(Save == false) continue;
+			if(Save == false) {
+			
+				RemoveFormComplete();
+				continue;
+			
+			};
 			
 			for(int i=0; i< currentFlight->flight.saleTotal; i++) {
 				
@@ -599,9 +696,7 @@ void BookTicket(AVLTree &root) {
 			if(target == -1) { // khong co trong listTicket
 				
 				PassengerNode* findedPassenger = findPassenger(root,IDHanhKhach);
-				
-				BaoLoi("Khong tim thay !");
-				
+			
 				if(findedPassenger == NULL) {
 					CreateForm(ContentPassenger, 1, 5, 27);
 					CreatePassenger(root,false,false,IDHanhKhach);
@@ -615,76 +710,12 @@ void BookTicket(AVLTree &root) {
 				
 				currentFlight->flight.TicketList[currentFlight->flight.saleTotal] = newTicket ;
 				currentFlight->flight.saleTotal++;
-				
 
-				quit = true;
 			}
 		
 		}	
 
 }
-
-void CancelFlightTicket(AVLTree root) {
-	system("cls");
-	system("color 0E");
-	gotoxy(X_Title, Y_Title);
-	cout << "Nhap ma chuyen bay de kiem tra : ";
-	string IDFlight;
-	
-	bool quit = false;
-	bool Save = true;
-	int order = 0;
-	FlightNode *currentFL = NULL;
-	
-	while(!quit) {
-		
-		system("color 0E");
-		ConstraintLetterAndNumber(IDFlight, order, Save, 12);
-		if(Save == false) return;
-		
-		currentFL = findFlight(FL,IDFlight.c_str());
-		if(currentFL == NULL) BaoLoi("Chuyen bay k ton tai. Nhap lai di !");
-		else {
-			if(currentFL->flight.status== 1 || currentFL->flight.status==4)
-			{
-				BaoLoi("Chuyen bay da huy or kethuc");
-			continue;
-			}
-			quit = true;
-		}
-	
-		
-	}
-	
-	gotoxy(X_Title, Y_Title);
-	cout << "Nhap CMND de kiem tra : ";
-	CreateForm(ContentPassenger,1,2,30);
-	
-	int IDPsg = 0; int target = 1;
-	while(true) {
-		ConstraintNumber(IDPsg,order,Save,12,99999);
-		if(Save == false) return;
-		
-		for(int i=0; i< currentFL->flight.saleTotal; i++) if(currentFL->flight.TicketList[i].CMND == IDPsg) {
-			target = i;
-			break;
-		}
-		
-		if(target == -1) { BaoLoi("Khong tim thay CMND trong ds "); return;
-		}
-		else break;
-	}	
-	
-	for(int i=target; i< currentFL->flight.saleTotal-1; i++) {
-		currentFL->flight.TicketList[i] = currentFL->flight.TicketList[i+1];
-		
-	}
-	currentFL->flight.saleTotal--;
-	BaoLoi("Xoa thanh cong");
-	
-	
-}
-
 
 
 

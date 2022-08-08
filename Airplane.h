@@ -108,7 +108,6 @@ void RemoveFormComplete()
 		gotoxy(x_add - 2 , y_add - 1 + i );
 		printf("%-32s", " ");
 	}
-	//ShowCur(false);
 }
 
 

@@ -8,7 +8,7 @@ int CurFlightPage;
 
 string ContentFlight[]= { "Ma Chuyen Bay","San Bay Den"	,"So Hieu May Bay","Thoi Gian Di","Tong So Ve","Trang Thai"};
 string InsertContentFL[]= { "Ma Chuyen Bay","San Bay Den"	,"So Hieu May Bay","Trang Thai","Thoi Gian Di"};
-
+int xKeyDisplay[7] = {1,20,45,63,80,95, 107};
 struct flight {
 
 	char flightCode[10];
@@ -26,10 +26,10 @@ struct flight {
 
 typedef struct flight Flight;
 
-// node trong list
+
 struct FlightNode {
 	
-	Flight flight;
+	Flight flight; // data 1 cb
 	FlightNode *pNext = NULL; // con tro -> con tro
 };
 
@@ -231,7 +231,7 @@ void ReadFlightFromFile(FlightList &FL) {
 
 void ShowFlight(Flight FL, int position) {
 	
-	int xKeyDisplay[7] = {1,20,45,63,80,95, 107};
+
 	
 
 	
