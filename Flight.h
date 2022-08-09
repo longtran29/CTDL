@@ -385,6 +385,31 @@ bool DeleteFlightById(FlightList &FL, const char * ID) {
 }
 
 
+PTR_FL checkDupOnOtherFlight(FlightNode* first, FlightNode* xFlight, int idHK)  { // check duplicate flight of passenger
+
+
+	for(PTR_FL k = first; k != NULL; k=k->pNext) {
+	
+		if(k != xFlight) {
+			
+			for(int i=0;i< k->flight.saleTotal; i++) // check trên tong sale dc cua 1 flight
+			{
+				if(k->flight.TicketList[i].CMND == idHK && checkDateTime(k->flight.departTime, xFlight->flight.departTime)) {
+					
+					return k;
+			
+				}
+			
+			}
+		
+			
+		}
+	
+	}
+	return NULL;
+
+}
+
 void DateTimeInput(datetime &dt, int order) {
 	
 	gotoxy(x_add + 13 + 2 , order * 3 + y_add);

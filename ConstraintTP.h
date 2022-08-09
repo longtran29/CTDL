@@ -350,5 +350,3 @@ void ConstraintForOnlyGender(int &result, int order, bool &Save,int width) {
 }
 
 
-
-

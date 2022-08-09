@@ -45,7 +45,7 @@ const int so_item = 9;
 #define y_hd 27
 // Toa do phan thong bao
 #define X_Notification 30
-#define Y_Notification 26
+#define Y_Notification 24
 
 // Toa do xuat flight page
 #define X_Title 20

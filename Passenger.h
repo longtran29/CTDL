@@ -387,8 +387,7 @@ void CreatePassenger(AVLTree &root, bool Edit, bool Del, int ID) { // nhap new i
 	string lastName;
 	int gender = 1; // 0 : female , 1: male
 	
-	
-	gotoxy(X_Notification, Y_Notification); cout<<" 0 la nu , 1 la nam";
+	gotoxy(x_add+10,4*3+y_add); cout<<" 0 la nu , 1 la nam";
 	
 	int ch ;
 	
@@ -444,8 +443,7 @@ void CreatePassenger(AVLTree &root, bool Edit, bool Del, int ID) { // nhap new i
 				
 					root =  AddPassenger(root,newPsg);
 					
-					BaoLoi("Add sucess !");
-					RemoveFormComplete();				
+					BaoLoi("Them hanh khach thanh cong !");		
 					return;
 					
 				}
@@ -605,6 +603,7 @@ void CancelFlightTicket(AVLTree root) { // huy ve mb
 
 
 
+
 void BookTicket(AVLTree &root) {
 
 	system("cls");
@@ -655,13 +654,9 @@ void BookTicket(AVLTree &root) {
 			
 			if(choosen == -1) return;
 			ShowCur(true);
-			
-			gotoxy(X_Title,Y_Title);
-			
 			system("cls");
-			
-			
 			system("color 0E");
+			gotoxy(X_Title+5,Y_Title+1);
 			cout<<"Nhap CMND -> ";
 			int IDHanhKhach = 0; int target = -1;
 			
@@ -676,7 +671,15 @@ void BookTicket(AVLTree &root) {
 			
 			};
 			
-			for(int i=0; i< currentFlight->flight.saleTotal; i++) {
+			PTR_FL k = checkDupOnOtherFlight(FL.pHead,currentFlight, IDHanhKhach);
+			
+			if(k != NULL) { // dat 2 cb, co trung lich ?????
+			
+				BaoLoi("Khach da dat tren mot chuyen bay khac cung lich");
+				continue;
+			}
+			
+			for(int i=0; i< currentFlight->flight.saleTotal; i++) { // da dat tren chuyen hien tai chua ?????
 				
 				if(currentFlight->flight.TicketList[i].CMND == IDHanhKhach) { // tim trong danh sach ve ? co ton tai hanh khach cmnd ?
 					target = i;
@@ -703,6 +706,11 @@ void BookTicket(AVLTree &root) {
 					nPassenger++;
 			
 				}
+				
+				
+			
+				RemoveFormComplete();
+			
 			
 				Ticket newTicket;
 				newTicket.CMND = IDHanhKhach;
@@ -710,7 +718,7 @@ void BookTicket(AVLTree &root) {
 				
 				currentFlight->flight.TicketList[currentFlight->flight.saleTotal] = newTicket ;
 				currentFlight->flight.saleTotal++;
-
+				
 			}
 		
 		}	

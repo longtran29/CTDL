@@ -74,6 +74,12 @@ void OutputDateTime(datetime dt)
 
 
 
+bool checkDateTime(DateTime dt1, DateTime dt2) {
+	
+	if(dt1.gio == dt2.gio && dt1.nam==dt2.nam && dt1.ngay== dt2.ngay && dt1.phut == dt2.phut && dt1.thang == dt2.thang)
+		return true;
+	return false;
+}
 
 
 
