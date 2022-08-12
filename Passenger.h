@@ -29,7 +29,8 @@ void CreateAVLTree(AVLTree &root) {
 
 int CurPosTicket = 1;
 int CurPosPreTicket = 1;
-int nPassenger= 0;
+
+int nPassenger= 0; // bien dem sl hanh khach
 
 int CheckStatus(Flight F, int x) {
 	
@@ -379,8 +380,8 @@ int ChooseTicket(Flight F) { // dash
 
 
 
-void CreatePassenger(AVLTree &root, bool Edit, bool Del, int ID) { // nhap new in4 passenger
-	bool Save = true;
+void CreatePassenger(AVLTree &root,bool &Save, bool Edit, bool Del, int ID) { // nhap new in4 passenger
+	Save = true;
 	
 	int order = 1;
 	string firstName;
@@ -402,10 +403,11 @@ void CreatePassenger(AVLTree &root, bool Edit, bool Del, int ID) { // nhap new i
 					if(Save == false)  { RemoveFormComplete(); return;}
 					
 					if(firstName == "")	{
-						BaoLoi("Khong bo trong");
-					} else order++; 					 
+						BaoLoi("Khong bo trong");continue;
+					} 					 
 					
 				}
+					order++;
 				
 					break;
 			case 2: // ten
@@ -413,7 +415,9 @@ void CreatePassenger(AVLTree &root, bool Edit, bool Del, int ID) { // nhap new i
 					ConstraintLetter(lastName,order,Save, 12);
 					if(Save == false)  { RemoveFormComplete(); return;}
 					
-					if(lastName ==  "") BaoLoi("Khong bo trong");
+					if(lastName ==  "") {
+						BaoLoi("Khong bo trong");continue;
+					}
 					
 					order++;
 					break;
@@ -425,7 +429,7 @@ void CreatePassenger(AVLTree &root, bool Edit, bool Del, int ID) { // nhap new i
 					ConstraintForOnlyGender(gender,order,Save,12);
 			
 					if(Save == false ) { RemoveFormComplete(); return;}
-					if(gender == -1) BaoLoi("Khong bo trong");
+					if(gender == -1) BaoLoi("Khong bo trong"); continue;
 					
 					order++;
 				
@@ -435,7 +439,11 @@ void CreatePassenger(AVLTree &root, bool Edit, bool Del, int ID) { // nhap new i
 				{
 					Passenger psg;
 					psg.CMND = ID;
+					stringOptimize(firstName);
+					StandardName((char*)firstName.c_str());
 					strcpy(psg.Surname,firstName.c_str());
+					stringOptimize(lastName);
+					StandardName((char*)lastName.c_str());
 					strcpy(psg.Name,lastName.c_str());
 					psg.Gender = gender;
 					
@@ -601,10 +609,8 @@ void CancelFlightTicket(AVLTree root) { // huy ve mb
 }
 
 
-
-
-
-void BookTicket(AVLTree &root) {
+/* Dat ve may bay*/
+void BookTicket(AVLTree &root) { 
 
 	system("cls");
 	system("color 0E");
@@ -641,14 +647,15 @@ void BookTicket(AVLTree &root) {
 		system("cls");
 		
 		while(true) {
-			
+			Save = true;
+			int IDHanhKhach=0; int target = -1;
 			gotoxy(X_Title, Y_Title);
 			cout << " Danh sach hanh khach co ma chuyen bay " << currentFlight->flight.flightCode << " toi " << currentFlight->flight.arrivalPlace<< " luc ";
 			OutputDateTime(currentFlight->flight.departTime);
 			
 			gotoxy(20,5);
 			cout << "Warn: VE MAU DO LA DA CO NGUOI DAT ROI !!";
-			
+		
 			system("color 0E");
 			int choosen = ChooseTicket(currentFlight->flight);
 			
@@ -656,9 +663,9 @@ void BookTicket(AVLTree &root) {
 			ShowCur(true);
 			system("cls");
 			system("color 0E");
-			gotoxy(X_Title+5,Y_Title+1);
+			gotoxy(X_Title+15,Y_Title+2);
 			cout<<"Nhap CMND -> ";
-			int IDHanhKhach = 0; int target = -1;
+			
 			
 			CreateForm(ContentPassenger,1,2,30);			
 		
@@ -702,8 +709,9 @@ void BookTicket(AVLTree &root) {
 			
 				if(findedPassenger == NULL) {
 					CreateForm(ContentPassenger, 1, 5, 27);
-					CreatePassenger(root,false,false,IDHanhKhach);
+					CreatePassenger(root,Save,true,false,IDHanhKhach);
 					nPassenger++;
+					if(Save == false) continue;
 			
 				}
 				

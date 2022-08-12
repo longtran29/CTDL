@@ -5,6 +5,8 @@
 
 string titleDisplay[] ={"So hieu", "Loai MB", "So cho ngoi"};
 int x_Pos[7] = {1,20,45,63,80,95, 107};
+
+int xKeyDisplay[7] = {1,20,45,63,80,95, 107};
 int TotalPage = 0;
 int CurrentPage = 0; 
 
@@ -13,6 +15,8 @@ struct DetailInfo {
 	char serialPlane[15];
 	char typePlane[40];
 	int seats;
+	int flights_num =0; // thong ke so lan thuc hien cb
+	
 };
 
 
@@ -114,11 +118,20 @@ void RemoveFormComplete()
 void Display(string content[], int numContent) {
 
 	system("color 0E"); // mau vang
-	Normal(14,0);
+	SetColor(14);
+	SetBGColor(0);
+	
 	for(int i=0; i< numContent; i++) {
 		gotoxy(x_Pos[i] + 3, 4);
 		cout<<content[i];
 	}
+	
+//	int j = Y_Display;
+//	for (int i = 0; i < numContent+1; i++)
+//		{
+//			gotoxy(xKeyDisplay[i], j);
+//			cout << char(176);
+//		}
 	
 	gotoxy(x_hd,y_hd);
 	cout << " Huong dan " ;
@@ -131,16 +144,6 @@ void Display(string content[], int numContent) {
 	
 
 }
-
-
-
-//DetailInfo *addPlane(DetailInfo &plane) {
-//	
-//	DetailInfo *t = new DetailInfo;
-//	*t = plane;
-//	return t;
-//	
-//}
 
 
  
@@ -169,7 +172,7 @@ void Xuat_DS_MB(listPlane list, int startIndex) {
 		
 	}
 
-		gotoxy(X_Page, Y_Page);
+	gotoxy(X_Page, Y_Page);
 	cout <<"Trang "<< CurrentPage << "/" << TotalPage;
 
 }
@@ -181,7 +184,7 @@ void ChangePage(listPlane list) {
 }
 
 
-void CreateRow(int x, int y, string content, int length) {
+void CreateRow(int x, int y, string content, int length) { // bo length
 	gotoxy(x,y);
 	cout<<content;
 }
@@ -198,8 +201,6 @@ void CreateForm(string content[],int startIdx, int numContent, int length) {
 		y = y+ 3;
 	
 	}
-	
-
 }
 
 int FindIndexAirplane(listPlane LA, const char *ma) {
@@ -229,20 +230,6 @@ bool RemoveAirplane(listPlane &list, int vitri) {
 //	WriteAirplaneToFile(list);
 	return true;
 }
-
-//void Nhap_DS_MB(listPlane &list ) {
-//	DetailInfo plane;
-//
-//	while(list.n < MAXLIST) {
-//	
-//		if(Nhap_Thong_Tin_MB(list,plane) == 0) return;
-//		list.planes[list.n] = addPlane(plane);
-//		*list.planes[list.n] = plane;
-//		list.n++;
-//		
-//	}
-//		
-//}
 
 
 void Nhap_MB(listPlane &list, bool Edit, bool Del) {
@@ -362,6 +349,7 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 				 else // them moi
 	 				{
 	 					list.planes[list.n] = new DetailInfo;
+	 					StandardName((char*)typePlane.c_str());
 	 					strcpy((list.planes[list.n]->serialPlane),ID.c_str());
 						strcpy((list.planes[list.n]->typePlane),typePlane.c_str());
 						list.planes[list.n]->seats = nchair;
@@ -381,20 +369,17 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 
 }
  	
- 
- 	
- 
 void MenuManageAirplane(listPlane &list) {
 	
 	ShowCur(false);
 	CurrentPage = 1;
 	TotalPage = (int)ceil( (double)list.n/NumberPerPage );
+	
+	Display(titleDisplay,3);
+		
 	Xuat_DS_MB(list, 0); // xuat danh sach tu phan tu thu 0
 	
 
-	
-	
-	
 	int signal;
 	
 	while(true) {

@@ -8,7 +8,7 @@ int CurFlightPage;
 
 string ContentFlight[]= { "Ma Chuyen Bay","San Bay Den"	,"So Hieu May Bay","Thoi Gian Di","Tong So Ve","Trang Thai"};
 string InsertContentFL[]= { "Ma Chuyen Bay","San Bay Den"	,"So Hieu May Bay","Trang Thai","Thoi Gian Di"};
-int xKeyDisplay[7] = {1,20,45,63,80,95, 107};
+
 struct flight {
 
 	char flightCode[10];
@@ -39,7 +39,7 @@ struct flightList {
 
 	PTR_FL pHead;
 	PTR_FL pTail;
-	int SoLuongChuyenBay = 0; // truong phu
+	int SoLuongChuyenBay; // truong phu
 	
 };
 
@@ -51,6 +51,7 @@ void initFlightList(FlightList &FL) {
 
 	FL.pHead = NULL;
 	FL.pTail = NULL;
+	FL.SoLuongChuyenBay = -1;
 }
 
 
@@ -195,7 +196,7 @@ void ReadFlightFromFile(FlightList &FL) {
 	
 	Flight F;
 	if(filein.is_open()) {
-		int sizeFlight;
+		int sizeFlight  = 0;
 		filein>>sizeFlight;
 		
 		string temp;
@@ -215,13 +216,20 @@ void ReadFlightFromFile(FlightList &FL) {
 			filein >> F.totalTicket;
 			filein >> F.status;
 			
+			for(int i = 0; i< planeList.n; i++) {
+				
+				if(strcmp(F.serialPlane, planeList.planes[i]->serialPlane) ==0) planeList.planes[i]->flights_num++;
+			}
+			
 			if(filein == NULL) break;
 			
 			getline(filein,temp);
 			ReadTicketListOfOneFlight(F);
 			addEndList(FL,F);
+			
 		}
 		FL.SoLuongChuyenBay++;
+		
 	}
 	filein.close();
 }
@@ -230,11 +238,6 @@ void ReadFlightFromFile(FlightList &FL) {
 
 
 void ShowFlight(Flight FL, int position) {
-	
-
-	
-
-	
 	gotoxy(xKeyDisplay[0] + 3, Y_Display + 3 + position*3);printf("%-15s",FL.flightCode);
 	gotoxy(xKeyDisplay[1] + 3, Y_Display + 3 + position*3);printf("%-18s",FL.arrivalPlace);
 	gotoxy(xKeyDisplay[2] + 3, Y_Display + 3 + position*3);printf("%-15s",FL.serialPlane);
@@ -272,7 +275,15 @@ void showFlightList(FlightList FL) {
 
 
 
+/* Cap nhat trang thai cb*/
+void updateStatusFlight(FlightList FL) {
+	
+	for(FlightNode* search = FL.pHead; search!= NULL; search = search->pNext) 
+		if(checkValidDT(search->flight.departTime)== false) search->flight.status= 4; // hoan tat
+}
 
+
+/* Phan trang chuyen bay*/
 void ShowFlightListPerPage(FlightList FL,int index) {
 	
 	system("cls");
@@ -281,8 +292,10 @@ void ShowFlightListPerPage(FlightList FL,int index) {
 	cout << " So luong chuyen bay : " << FL.SoLuongChuyenBay;
 	int count = -1;
 	
+	updateStatusFlight(FL); // cap nhat trang thai cb
+	
 	if(FL.pHead == NULL || FL.pTail == NULL) return;
-	int i=0;
+
 	
 	for(PTR_FL search= FL.pHead; search != NULL; search = search->pNext ) {
 		
@@ -302,6 +315,8 @@ void ShowFlightListPerPage(FlightList FL,int index) {
 
 }
 
+
+/* Thay doi trang chuyen bay*/
 void ChangePageFlightPage(FlightList &FL) {
 	
 	system("cls");
@@ -319,6 +334,7 @@ void ChangePageFlightPage(FlightList &FL) {
 }
 
 
+/* Tim may bay qua ma chuyen bay*/
 PTR_FL findFlight(FlightList FL, const char *ID) {
 	
 	if(FL.pHead == NULL) return NULL;
@@ -368,7 +384,7 @@ bool DeleteFlightById(FlightList &FL, const char * ID) {
 	
 	if(delFlight == NULL) return false;
 	else if (delFlight == FL.pHead) return removeHead(FL);
-//	else if (delFlight == FL.pTail) removeTail(FL);
+
 	else {
 		PTR_FL temp = FL.pHead;
 		while(true) {
@@ -384,8 +400,8 @@ bool DeleteFlightById(FlightList &FL, const char * ID) {
 	
 }
 
-
-PTR_FL checkDupOnOtherFlight(FlightNode* first, FlightNode* xFlight, int idHK)  { // check duplicate flight of passenger
+/* check duplicate flight of passenger */
+PTR_FL checkDupOnOtherFlight(FlightNode* first, FlightNode* xFlight, int idHK)  { 
 
 
 	for(PTR_FL k = first; k != NULL; k=k->pNext) {
@@ -407,6 +423,71 @@ PTR_FL checkDupOnOtherFlight(FlightNode* first, FlightNode* xFlight, int idHK)  
 	
 	}
 	return NULL;
+
+}
+
+void Swap(int &a, int &b) {
+	int temp = a;
+	a = b;
+	b = temp;
+}
+
+void bubbleSortPlane(listPlane planeList, int A[]) {
+
+	for(int i=0; i< planeList.n-1; i++) {
+		for(int j = i+1; j<planeList.n; j++) {
+		
+			if(planeList.planes[i]->flights_num < planeList.planes[j]->flights_num )
+				Swap(A[i],A[j]);
+		}
+	
+	}
+}
+
+
+void ShowHowManyTimesAirplaneTookOff(DetailInfo *A,int position) {
+	
+	gotoxy(xKeyDisplay[0] + 3, Y_Display + 3 + position * 3); cout<<position;
+	gotoxy(xKeyDisplay[1] + 3, Y_Display + 3 + position * 3); printf("%-20s", A->serialPlane );
+	gotoxy(xKeyDisplay[2] + 3, Y_Display + 3 + position * 3); printf("%-5d",  A->flights_num );
+
+
+}
+
+/*Thong ke so chuyen bay cua 1 hang may bay*/
+void WatchStatics() {
+	
+	system("cls");
+	gotoxy(X_Title, Y_Title);
+	cout << " SO CHUYEN BAY DA THUC HIEN CUA CAC MAY BAY";	
+	string StaticsTable[3] = { "Number","ID Plane" ,"Fly Times"};
+
+	gotoxy(xKeyDisplay[0] + 3, Y_Display + 0 * 3); cout<<StaticsTable[0];
+	gotoxy(xKeyDisplay[1] + 3, Y_Display + 0 * 3); cout<<StaticsTable[1];
+	gotoxy(xKeyDisplay[2] + 3,Y_Display + 0 * 3);  cout<<StaticsTable[2];
+	
+	int slmb = planeList.n; // slmb
+	int A[slmb];
+	for(int i=0; i< slmb; i++) A[i] = i;
+	
+	bubbleSortPlane(planeList, A);
+	
+	for(int i =0; i< slmb; i++) {
+		ShowHowManyTimesAirplaneTookOff(planeList.planes[A[i]],i); // in ra mb tai vi tri thu A[i]
+	
+	}
+	
+	
+	int signal;
+	while (true)
+	{
+		signal = _getch();
+		if (signal == ESC)
+		{
+			return;
+		}
+	}
+	
 
 }
 
@@ -448,6 +529,8 @@ void DateTimeInput(datetime &dt, int order) {
 	
 
 }
+
+
 
 void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 
@@ -515,9 +598,10 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 					gotoxy(x_add + 16, 0 * 3 + y_add);cout << ID;
 					gotoxy(x_add + 16, 1 * 3 + y_add);cout << destination;
 					gotoxy(x_add + 16, 2 * 3 + y_add);cout << serialPlane;
-					gotoxy(x_add + 16, 3 * 3 + y_add);OutputDateTime(search->flight.departTime);
-					gotoxy(x_add + 16, 4 * 3 + y_add);cout << search->flight.totalTicket;
-					gotoxy(x_add + 16, 5 * 3 + y_add);cout << search->flight.status;
+					gotoxy(x_add + 16, 3 * 3 + y_add);cout << search->flight.status;
+					gotoxy(x_add + 16, 4 * 3 + y_add);
+					OutputDateTime(search->flight.departTime);
+				
 				}
 				order++;
 				break;
@@ -531,10 +615,13 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 					BaoLoi(" Vui Long Khong Bo Trong ");
 					break;
 				}
+				
+				stringOptimize(destination);
+				
 				order++;
 				break;	
 			case 2:
-				ConstraintLetterAndNumber(serialPlane,order,Save,17);
+				ConstraintLetterAndNumber(serialPlane,order,Save,16);
 				if(!Save) {
 					return;
 				}
@@ -557,7 +644,6 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 				break;
 			case 4:
 			
-//				InitDataTime(DT);
 				struct DateTime DT;
 				{
 					DT = { ngay:0, thang:0, nam:0, gio:0, phut:0};
@@ -570,15 +656,17 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 				break;
 				
 		
-			case 5:
+			case 5: 
 				{
 					Flight flight;
 					strcpy(flight.flightCode, ID.c_str());
-					strcpy(flight.arrivalPlace, destination.c_str());
+					stringOptimize(destination);
+					StandardName((char*)destination.c_str() );
+					strcpy(flight.arrivalPlace,destination.c_str() );
 					strcpy(flight.serialPlane, serialPlane.c_str());
 					flight.departTime = DT;
 					flight.status = 2;
-					flight.totalTicket = planeList.planes[target]->seats;
+					flight.totalTicket = planeList.planes[target]->seats; // so luong ve = so cho cua mb
 					flight.saleTotal = 0;
 					addEndList(FL, flight);
 //					WriteFlightToFile(FL);
@@ -634,25 +722,25 @@ void ManageFlightPlane(FlightList &FL) {
 					system("cls");
 					Display(ContentFlight,6);
 					TotalFlightPage = (int)ceil( (double)FL.SoLuongChuyenBay/NumberPerPage );			
-					ShowFlightListPerPage(FL,(CurFlightPage-1)/NumberPerPage);
+					ShowFlightListPerPage(FL,(CurFlightPage-1)*NumberPerPage);
 									
 				}
 				else if(signal == DEL) {
 					system("cls");
-					CreateForm(ContentFlight,0,6,27);
+					CreateForm(ContentFlight,0,1,27);
 					gotoxy(115 + 12,0 * 3 + 4);
 					Nhap_Chuyen_Bay(FL, false, true);
 					TotalFlightPage = (int)ceil( (double)FL.SoLuongChuyenBay/NumberPerPage );
-					ShowFlightListPerPage(FL,(CurFlightPage-1)/NumberPerPage);
+					ShowFlightListPerPage(FL,(CurFlightPage-1)*NumberPerPage);
 				}
 				
 				else if(signal == HOME) {
 					system("cls");
-					CreateForm(ContentFlight,0,6,27);
+					CreateForm(InsertContentFL,0,5,27);
 					gotoxy(115 + 12,0 * 3 + 4);
 					Nhap_Chuyen_Bay(FL,true, false);
 					TotalFlightPage = (int)ceil( (double)FL.SoLuongChuyenBay/NumberPerPage );
-					ShowFlightListPerPage(FL,(CurFlightPage-1)/NumberPerPage);
+					ShowFlightListPerPage(FL,(CurFlightPage-1)*NumberPerPage);
 					
 				}
 				
