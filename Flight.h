@@ -7,7 +7,7 @@ int TotalFlightPage = 0;// so trang cua danh sach chuyen bay
 int CurFlightPage;
 
 string ContentFlight[]= { "Ma Chuyen Bay","San Bay Den"	,"So Hieu May Bay","Thoi Gian Di","Tong So Ve","Trang Thai"};
-string InsertContentFL[]= { "Ma Chuyen Bay","San Bay Den"	,"So Hieu May Bay","Trang Thai","Thoi Gian Di"};
+string InsertContentFL[]= { "Ma Chuyen Bay","San Bay Den"	,"So Hieu May Bay","Thoi Gian Di"};
 
 struct flight {
 
@@ -425,16 +425,6 @@ bool DeleteFlightById(FlightList &FL, const char * ID) {
 	}
 	
 }
-// cap nhat trang thai chuyen bay
-void UpdateFlightStatus(FlightList &FL)
-{
-	for( FlightNode *search = FL.pHead; search != NULL ; search = search->pNext)
-	{
-		if( checkValidDT( search->flight.departTime) == false )
-			// xet trang thai ve hoan tat
-			search->flight.status = 4;
-	}
-}
 
 void Swap(int &a, int &b) {
 	int temp = a;
@@ -606,11 +596,11 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 					
 					// xoa chuyen bay theo ID
 					if(!DeleteFlightById(FL, ID.c_str())) {
-						BaoLoi("Delete fail !");
+						BaoLoi("CB khong ton tai!");
 					}
 					else 					
 						{
-							BaoLoi("Delete successful !");
+							BaoLoi("Xoa thanh cong !");
 						}
 					
 					return;
@@ -679,14 +669,7 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 				}
 				order++;	
 				break;	
-				
 			case 3:
-//				gotoxy(x_add+12,3*3+y_add);cout<<"Con ve";
-				order++;
-				break;
-				
-			case 4:
-			
 				InitDataTime(DT);
 				struct DateTime DT;
 				{
@@ -699,13 +682,13 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 				order++;
 				break;
 			
-			
-				
 		
-			case 5:
+			case 4:
 				{
 					Flight addflight;
 					strcpy(addflight.flightCode, ID.c_str());
+					stringOptimize(destination);
+					StandardName((char*)destination.c_str());
 					strcpy(addflight.arrivalPlace, destination.c_str());
 					strcpy(addflight.serialPlane, serialPlane.c_str());
 					addflight.departTime = DT;
@@ -725,7 +708,7 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 //				InitDataTime(DT);
 					order = 0;
 				}
-				
+				quit = true;
 				break;
 			
 		} //  end switch
@@ -782,7 +765,7 @@ void ManageFlightPlane(FlightList &FL) {
 				}
 				else if(signal == DEL) {
 					system("cls");
-					CreateForm(ContentFlight,0,6,27);
+					CreateForm(ContentFlight,0,1,27);
 					gotoxy(115 + 12,0 * 3 + 4);
 					Nhap_Chuyen_Bay(FL, false, true);
 					TotalFlightPage = (int)ceil( (double)FL.SoLuongChuyenBay/NumberPerPage );
@@ -805,18 +788,4 @@ void ManageFlightPlane(FlightList &FL) {
 			
 	}
 	
-}
-// giai phong vung nho
-bool CleanUpFlightList(FlightList &FL)
-{
-	if( FL.pHead == NULL)
-		return false;
-	PTR_FL clean;
-	while(FL.pHead != NULL)
-	{
-		clean = FL.pHead;
-		FL.pHead = FL.pHead->pNext;
-		delete clean;
-	}
-	return true;
 }

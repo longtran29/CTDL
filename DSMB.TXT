@@ -7,3 +7,4 @@ VT1452 Viettravel 65
 VJ8956 Vietjet 45
 VJ7856 Vietjet 75
 JT856 Jetstar 82
+JT8562 Jetstar 68

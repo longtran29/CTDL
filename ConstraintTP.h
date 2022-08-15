@@ -259,7 +259,7 @@ void ConstraintForOnlyNumber(int &num,int order,bool &Save,int width ,int maxTic
 
 void ConstraintForDateAndTime(int &result,int &dtOrder,int space , int limit) {
 //	gotoxy(x_add + 13 + 11, order * 3 + y_add);
-	gotoxy(x_add + space + dtOrder * 3 +1 ,  12 + y_add);
+	gotoxy(x_add + space + dtOrder * 3 +1 , 3 *3  + y_add);
 	if( result != 0 )
 		cout << result;
 	int num = result;
