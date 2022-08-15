@@ -426,6 +426,71 @@ bool DeleteFlightById(FlightList &FL, const char * ID) {
 	
 }
 
+void Swap(int &a, int &b) {
+	int temp = a;
+	a = b;
+	b = temp;
+}
+
+void bubbleSortPlane(listPlane planeList, int A[]) {
+
+	for(int i=0; i< planeList.n-1; i++) {
+		for(int j = i+1; j<planeList.n; j++) {
+
+			if(planeList.planes[i]->flights_num < planeList.planes[j]->flights_num )
+				Swap(A[i],A[j]);
+		}
+
+	}
+}
+
+
+void ShowHowManyTimesAirplaneTookOff(DetailInfo *A,int position) {
+
+	gotoxy(xKeyDisplay[0] + 3, Y_Display + 3 + position * 3); cout<<position;
+	gotoxy(xKeyDisplay[1] + 3, Y_Display + 3 + position * 3); printf("%-20s", A->serialPlane );
+	gotoxy(xKeyDisplay[2] + 3, Y_Display + 3 + position * 3); printf("%-5d",  A->flights_num );
+
+
+}
+
+/*Thong ke so chuyen bay cua 1 hang may bay*/
+void WatchStatics() {
+
+	system("cls");
+	gotoxy(X_Title, Y_Title);
+	cout << " SO CHUYEN BAY DA THUC HIEN CUA CAC MAY BAY";	
+	string StaticsTable[3] = { "Number","ID Plane" ,"Fly Times"};
+
+	gotoxy(xKeyDisplay[0] + 3, Y_Display + 0 * 3); cout<<StaticsTable[0];
+	gotoxy(xKeyDisplay[1] + 3, Y_Display + 0 * 3); cout<<StaticsTable[1];
+	gotoxy(xKeyDisplay[2] + 3,Y_Display + 0 * 3);  cout<<StaticsTable[2];
+
+	int slmb = planeList.n; // slmb
+	int A[slmb];
+	for(int i=0; i< slmb; i++) A[i] = i;
+
+	bubbleSortPlane(planeList, A);
+
+	for(int i =0; i< slmb; i++) {
+		ShowHowManyTimesAirplaneTookOff(planeList.planes[A[i]],i); // in ra mb tai vi tri thu A[i]
+
+	}
+
+
+	int signal;
+	while (true)
+	{
+		signal = _getch();
+		if (signal == ESC)
+		{
+			return;
+		}
+	}
+
+
+}
+
 
 
 
@@ -467,6 +532,34 @@ void DateTimeInput(datetime &dt, int order) {
 	
 
 }
+
+PTR_FL checkDupOnOtherFlight(FlightNode* first, FlightNode* xFlight, int idHK)  { 
+
+
+	for(PTR_FL k = first; k != NULL; k=k->pNext) {
+	
+		if(k != xFlight) {
+			
+			for(int i=0;i< k->flight.saleTotal; i++) // check trên tong sale dc cua 1 flight
+			{
+				if(k->flight.TicketList[i].CMND == idHK && checkDateTime(k->flight.departTime, xFlight->flight.departTime)) {
+					
+					return k;
+			
+				}
+			
+			}
+		
+			
+		}
+	
+	}
+	return NULL;
+
+}
+
+
+
 
 void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 
