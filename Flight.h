@@ -425,6 +425,16 @@ bool DeleteFlightById(FlightList &FL, const char * ID) {
 	}
 	
 }
+// cap nhat trang thai chuyen bay
+void UpdateFlightStatus(FlightList &FL)
+{
+	for( FlightNode *search = FL.pHead; search != NULL ; search = search->pNext)
+	{
+		if( checkValidDT( search->flight.departTime) == false )
+			// xet trang thai ve hoan tat
+			search->flight.status = 4;
+	}
+}
 
 
 
@@ -702,4 +712,18 @@ void ManageFlightPlane(FlightList &FL) {
 			
 	}
 	
+}
+// giai phong vung nho
+bool CleanUpFlightList(FlightList &FL)
+{
+	if( FL.pHead == NULL)
+		return false;
+	PTR_FL clean;
+	while(FL.pHead != NULL)
+	{
+		clean = FL.pHead;
+		FL.pHead = FL.pHead->pNext;
+		delete clean;
+	}
+	return true;
 }
