@@ -2,11 +2,8 @@
 
 void ConstraintLetterAndNumber(string &chuoi, int order,bool &Save, int width) {
 	int lenght = (int)chuoi.length();
-//	gotoxy(x_add + width,order * 3 + y_add);
 	gotoxy(x_add+width,order*3+y_add);
-	cout << chuoi<<"  ";
-	cout<<"\b\b";
-
+	cout << chuoi;
 	int count = lenght;
 	int signal;
 	while(true)
@@ -105,6 +102,13 @@ void ConstraintNumber(int &num, int order,bool &Save, int width, int limitseats)
 	gotoxy(x_add+width,order*3+y_add);
 	if (num > 0) cout<<num;
 	
+	int count= 0; // backspace fn
+	
+	do {
+		num /= 10;
+		count++;
+	} while(num!=0);
+	
 	while(true)
 	{
 			int signal = _getch();
@@ -114,13 +118,13 @@ void ConstraintNumber(int &num, int order,bool &Save, int width, int limitseats)
 						{
 							
 							int result = signal - 48;
-							if(signal == 48) {
+							if(signal == 48 && count == 0) {
 								continue;	
 							}
-							else if((num*10+ result) < limitseats ) {
-								
-								num = num * 10 +result;
+							else if((num*10+ result) <= limitseats ) {
 								cout<<result;
+								num = num * 10 +result;
+								count++;
 							
 							}
 						}
@@ -136,9 +140,10 @@ void ConstraintNumber(int &num, int order,bool &Save, int width, int limitseats)
 						}
 					
 			}
-			else if(signal == BACKSPACE  ) {
+			else if(signal == BACKSPACE && count >0 ) {
 				cout << (char)BACKSPACE<<" "<<(char)BACKSPACE;
 				num /=10;
+				count--;
 			}
 					
 	
@@ -151,9 +156,8 @@ void ConstraintsForLetterAndSpace(string &destination,bool &Save,int order,int w
 	int signal;
 	int lens = (int) destination.length();
 	gotoxy(x_add+width,order*3+y_add);
-//	gotoxy(x_add + 16, 1 * 3 + y_add);
-	cout<< destination;
-	cout<"   ";
+
+	
 	while(true) {
 		
 		while(kbhit()) {
@@ -182,9 +186,9 @@ void ConstraintsForLetterAndSpace(string &destination,bool &Save,int order,int w
 				}
 				else if(signal == BACKSPACE && lens >0)	 {
 					
-					cout << "\b" << " " << "\b";
-						destination.erase(destination.length() - 1, 1);
-						lens--;
+					cout << (char)BACKSPACE<<" "<<(char)BACKSPACE;
+					destination.erase(destination.length() - 1, 1);
+					lens--;
 				}
 			
 			
@@ -200,6 +204,13 @@ void ConstraintForOnlyNumber(int &num,int order,bool &Save,int width ,int maxTic
 	gotoxy(x_add+width,order*3+y_add);
 	if(num >0)  cout<< num;
 	
+	int count= 0; // backspace fn
+	
+	do {
+		num /= 10;
+		count++;
+	} while(num!=0);
+	
 	while(true)
 	{
 			int signal = _getch();
@@ -209,13 +220,14 @@ void ConstraintForOnlyNumber(int &num,int order,bool &Save,int width ,int maxTic
 						{
 							
 							int result = signal - 48;
-							if(signal == 48) {
+							if(signal == 48 && count == 0) {
 								continue;	
 							}
 							else if((num*10+ result) <= maxTicket ) {
 								
 								num = num * 10 +result;
 								cout<<result;
+								count++;
 							
 							}
 						}
@@ -232,9 +244,11 @@ void ConstraintForOnlyNumber(int &num,int order,bool &Save,int width ,int maxTic
 						}
 					
 			}
-			else if(signal == BACKSPACE  ) {
+			else if(signal == BACKSPACE && count>0  ) {
 				cout << (char)BACKSPACE<<" "<<(char)BACKSPACE;
+				count--;
 				num /=10;
+				
 			}
 					
 	
@@ -343,6 +357,40 @@ void ConstraintForOnlyGender(int &result, int order, bool &Save,int width) {
 	
 }
 
+void DelHeadOptimize(string &result) {
+	int i = 0;
+	while(true) {
+		
+		if(result[i] == ' ')
+	 		result.erase(i,1);
+	 	else break;
+	
+	}
+}
+
+void stringOptimize(string &result) {
+	DelHeadOptimize(result);
+	for(int i=1; i< result.length(); i++) {
+		
+		if(result[i-1] == ' ' && result[i]== ' ')  	{
+			result.erase(i-1,1);
+			i--;
+		}
+		else if (result[result.length()-1] == ' ') result.erase(result.length()-1, 1);	
+	}
 
 
+}
+
+
+
+void StandardName(char* a) 
+{
+	a[0] = toupper(a[0]);
+	for (int i = 1; i < strlen(a); i++)
+	{
+		if (a[i - 1] == ' ' && a[i] != ' ') a[i] = toupper(a[i]);
+		else a[i] = tolower(a[i]);
+	}
+}
 
