@@ -1,6 +1,5 @@
 #pragma once
 
-
 char thucdon [so_item][50] = {  "1.Quan Li Cac May Bay",
 					   "2.Quan Li Cac Chuyen Bay",
 					   "3.Dang Ky Ve May Bay",

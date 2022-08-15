@@ -1,6 +1,5 @@
 VN1187 Boing 100
 VN2315 Airbus 40
-VT1123 Vietair 56
 JT1456 Jetstar 85
 HA8956 Haiau 54
 VT1452 Viettravel 65
@@ -8,3 +7,4 @@ VJ8956 Vietjet 45
 VJ7856 Vietjet 75
 JT856 Jetstar 82
 JT8562 Jetstar 68
+VN2317 Vietstar 52

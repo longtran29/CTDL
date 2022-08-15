@@ -283,26 +283,38 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 						break;
 					 }
 					
-					 
-					 if(Del) {
+					target = FindIndexAirplane(list,ID.c_str());
 					
-								if(!RemoveAirplane(list,FindIndexAirplane(list,ID.c_str())) ){
+					
+					if(Edit || Del && target != -1 ){
+						ID = list.planes[target]->serialPlane;
+						typePlane = list.planes[target]->typePlane;
+						nchair = list.planes[target]->seats;
+						
+						gotoxy(x_add+12,0*3+y_add); cout<< ID;
+						gotoxy(x_add+12,1*3+y_add); cout<< typePlane;
+						gotoxy(x_add+12,2*3+y_add); cout<< nchair;
+						
+					}
+					
+					 
+					if(Del && target != -1) {
+					 		
+					 	int commit = repeate("Xoa", "Xoa nhan xoa  ?");
+						if(commit == 1) {
+							if(!RemoveAirplane(list,target) ){
 								
 									BaoLoi("ID not exists . Delete Fail !");
 								
 								}
-								else {
-									BaoLoi("Delete Success !");
-								}
-								
-								return;
-					
+							else BaoLoi("Delete Success !");	
 						}
+						else return;
 						
-					target = FindIndexAirplane(list,ID.c_str());
-				
+						return;
 					
-					
+					}
+						
 					
 					if(target >-1 && Edit == false) { // khong them duoc
 					 	BaoLoi("ID da ton tai. Nhap ID khac");
@@ -313,16 +325,7 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 						BaoLoi("ID not exists !");
 						break;
 					}		
-					if(Edit){
-						ID = list.planes[target]->serialPlane;
-						typePlane = list.planes[target]->typePlane;
-						nchair = list.planes[target]->seats;
-						
-						gotoxy(x_add+12,0*3+y_add); cout<< ID;
-						gotoxy(x_add+12,1*3+y_add); cout<< typePlane;
-						gotoxy(x_add+12,2*3+y_add); cout<< nchair;
-						
-					}
+					
 				
 				 }
 				 order++;

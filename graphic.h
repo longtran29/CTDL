@@ -1,5 +1,6 @@
 
 
+#include <Windows.h>
 //const int so_item = 8;
 //const int dong =1;
 //const int cot = 1 ;
@@ -36,6 +37,19 @@ void BaoLoi (char *s){
 }
 
 
+int repeate(char* title, char* content) {
+
+	 if (MessageBoxA(NULL,content, title, MB_YESNO) == IDYES)
+    {
+//        MessageBoxA(NULL,"YES pressed","",MB_OK);
+		return 1;
+    }
+    else
+    {
+//        MessageBoxA(NULL,"NO pressed","",MB_OK);
+		return 0;
+    }
+}
 
 int MenuDong(char td [so_item][50]){
 Normal(15,0);
