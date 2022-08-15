@@ -4,7 +4,6 @@
 #include <sstream>
 
 string titleDisplay[] ={"So hieu", "Loai MB", "So cho ngoi"};
-int x_Pos[7] = {1,20,45,63,80,95, 107};
 
 int xKeyDisplay[7] = {1,20,45,63,80,95, 107};
 int TotalPage = 0;
@@ -121,17 +120,43 @@ void Display(string content[], int numContent) {
 	SetColor(14);
 	SetBGColor(0);
 	
+	
+//int xKeyDisplay[7] = {1,20,45,63,80,95, 107};
+	
 	for(int i=0; i< numContent; i++) {
-		gotoxy(x_Pos[i] + 3, 4);
+		gotoxy(xKeyDisplay[i] + 3 , 4);
 		cout<<content[i];
 	}
 	
-//	int j = Y_Display;
-//	for (int i = 0; i < numContent+1; i++)
-//		{
-//			gotoxy(xKeyDisplay[i], j);
-//			cout << char(176);
-//		}
+	int j = Y_Display;
+	for (int i = 0; i < numContent+1; i++)
+		{
+			gotoxy(xKeyDisplay[i], j);
+		}
+		
+	// ve thanh doc
+	for(int i = Y_Display; i < Y_Display+ 21; i++) {
+		for(int j = 0; j < numContent +1 ; j++) {
+			gotoxy(xKeyDisplay[j],i);cout<<char(45);
+		}
+	}
+	
+	// ve thanh ngang tren va duoi
+	for(int i = xKeyDisplay[0]; i< xKeyDisplay[numContent]; i++) {
+		
+		gotoxy(i,Y_Display);
+		cout <<char(45);
+		
+		gotoxy(i,Y_Display+2);
+		cout <<char(45);
+
+		
+		gotoxy(i,Y_Display+21);
+		cout <<char(45);
+
+		
+	}
+	
 	
 	gotoxy(x_hd,y_hd);
 	cout << " Huong dan " ;
@@ -150,9 +175,9 @@ void Display(string content[], int numContent) {
 
 void show_one_plane(DetailInfo *plane, int position) {
 
-	gotoxy(x_Pos[0] + 3, Y_Display + 3 + position*3);printf("%-15s",plane->serialPlane);
-	gotoxy(x_Pos[1] + 3, Y_Display + 3 + position*3);printf("%-15s",plane->typePlane);
-	gotoxy(x_Pos[2] + 3, Y_Display + 3 + position*3);printf("%-15d",plane->seats);
+	gotoxy(xKeyDisplay[0] + 3, Y_Display + 3 + position*3);printf("%-15s",plane->serialPlane);
+	gotoxy(xKeyDisplay[1] + 3, Y_Display + 3 + position*3);printf("%-15s",plane->typePlane);
+	gotoxy(xKeyDisplay[2] + 3, Y_Display + 3 + position*3);printf("%-15d",plane->seats);
 	
 	
 }

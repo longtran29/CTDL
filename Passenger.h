@@ -193,11 +193,11 @@ void SavePassengerToFile(AVLTree root) { // luu hanh khach vao file
 void ShowPassenger(Passenger psg, int position) { // show 1 passenger
 	
 	
-	gotoxy(x_Pos[0] + 3, Y_Display + 3 + position*3);printf("%-5d",position+1);
-	gotoxy(x_Pos[1] + 3, Y_Display + 3 + position*3);printf("%-12d",psg.CMND);
-	gotoxy(x_Pos[2] + 3, Y_Display + 3 + position*3);printf("%-20s",psg.Surname);
-	gotoxy(x_Pos[3] + 3, Y_Display + 3 + position*3);printf("%-10s",psg.Name);
-	gotoxy(x_Pos[4] + 3, Y_Display + 3 + position*3);
+	gotoxy(xKeyDisplay[0] + 3, Y_Display + 3 + position*3);printf("%-5d",position+1);
+	gotoxy(xKeyDisplay[1] + 3, Y_Display + 3 + position*3);printf("%-12d",psg.CMND);
+	gotoxy(xKeyDisplay[2] + 3, Y_Display + 3 + position*3);printf("%-20s",psg.Surname);
+	gotoxy(xKeyDisplay[3] + 3, Y_Display + 3 + position*3);printf("%-10s",psg.Name);
+	gotoxy(xKeyDisplay[4] + 3, Y_Display + 3 + position*3);
 	if(psg.Gender == 0) cout<<"Nam"; else cout<<"Nu";
 	
 	int signal;
