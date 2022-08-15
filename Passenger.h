@@ -225,6 +225,8 @@ void WatchPassengerFlight(AVLTree root, Flight F) { // menu  case 5 :  show hanh
 	
 }
 
+
+
 // load passenger
 void LoadPassengerFromFile(AVLTree &root) {
 	ifstream filein;string temp;
@@ -607,6 +609,7 @@ void CancelFlightTicket(AVLTree root) { // huy ve mb
 	
 	
 }
+
 
 
 /* Dat ve may bay*/

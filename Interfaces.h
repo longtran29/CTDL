@@ -50,6 +50,7 @@ void MenuCenter(){
 				WatchPassengerList(root);
 				break;
 			case 6:
+				
 				WatchStatics();
 				break;
 			case so_item:
