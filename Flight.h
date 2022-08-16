@@ -88,6 +88,7 @@ void addBeginningList(FlightList &FL, Flight data) {
 
 void addEndList(FlightList &FL, Flight data) {
 		PTR_FL nodeTemp = createFlightNode(data);
+		
 		if(FL.pTail == NULL) {
 			FL.pHead = FL.pTail = nodeTemp;
 		}
@@ -97,8 +98,10 @@ void addEndList(FlightList &FL, Flight data) {
 			FL.pTail->pNext = nodeTemp;
 			FL.pTail = nodeTemp;
 			
+			
 		}
 		FL.SoLuongChuyenBay++;
+		
 	
 }
 void removeTail(FlightList &FL) {
@@ -176,15 +179,22 @@ void SaveFlight( Flight &F,ofstream &fileout)
 	SaveTicketListOfOneFlight(F);
 	
 }
-PTR_FL FindBefore(FlightList &FL,char *flightCode[10]){
+PTR_FL FindBefore(FlightList &FL,char flightCode[10]){
 	//NEU head=null thi ham goi tu tim node dau 
+	
 	if(FL.pHead==NULL||FL.pHead->pNext==NULL){
 		return NULL;
 	}
-
+	if(strcmp((FL.pHead->flight.flightCode),flightCode)==0){
+		return NULL;
+	}
 //	PTR_FL *k=findFlight(FL,flightCode)
 	PTR_FL f;
-	for(f=FL.pHead;f!=NULL||strcmp((f->pNext->flight.flightCode),*flightCode)==0;f=f->pNext){
+	for(f=FL.pHead;f->pNext!=NULL;f=f->pNext){
+//		cout<<f<<"    /"<<f->pNext<<"\n";
+		if(strcmp((f->pNext->flight.flightCode),flightCode)==0){
+			break;
+		}
 //		if(f->flight == k->flight){
 //			PTR_FL *g= createFlightNode(k->flight)
 //			g->pNext=f;
@@ -194,28 +204,50 @@ PTR_FL FindBefore(FlightList &FL,char *flightCode[10]){
 //		p=f
 		
 	}
+//	cout<<"FindBefore";
 	return f;
 
 
 }
-bool EditFlight(FlightList &FL,char *flightCode[10], PTR_FL flightNode){
-	PTR_FL search = FindBefore(FL,flightCode);
-	if(search==NULL){
-		if(strcmp((FL.pHead->flight.flightCode),*flightCode)==0){
-//			&(flightNode->flight.flightCode)=*flightCode;
-			FL.pHead=flightNode;
+bool EditFlight(FlightList &FL,char flightCode[10], Flight flightNode){
+//	cout<<"START EditFlight\n";
+	PTR_FL ptr = FindBefore(FL,flightCode);
+
+	PTR_FL tmp0 = new FlightNode;
+	
+//	FlightNode tmp = *tmp0;
+//	tmp.flight=flightNode;
+	
+	if (ptr ==NULL){
+		if (strcmp(FL.pHead->flight.flightCode,flightCode)==0){
+			tmp0->flight=flightNode;
+			tmp0->pNext=FL.pHead->pNext;
+			FL.pHead = tmp0;
+			
+//			cout<<tmp0->flight.arrivalPlace;
 		}
 	}
-//thay doi node nhung chua xu li ticket
 	else{
-		PTR_FL tmp=search->pNext->pNext;
-		search->pNext=flightNode;
-		search->pNext->pNext=tmp;
-		
 
-	}
+		tmp0->flight=flightNode;
+		PTR_FL tmp1 = ptr->pNext;
+		ptr->pNext= tmp0;
+		tmp0->pNext=tmp1->pNext;
+		
+//		cout<<tmp0->flight.arrivalPlace;
+//		cout<<"sua than";
+		
+	} 
+//	for(PTR_FL ptr=FL.pHead;ptr!=NULL;ptr=ptr->pNext){
+//						cout<<"CHUYEN BAY : "<<ptr->flight.arrivalPlace<<"  "<<ptr->flight.flightCode<<"\n";
+//					}
+//					getch();
+//	cout<<"END EditFlight";
+
+
 		
 }
+
 
 
 
@@ -691,7 +723,9 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 			
 		
 			case 4:
-				{
+				{ 
+//					cout<<"START CASE 4";
+					
 					Flight addflight;
 					strcpy(addflight.flightCode, ID.c_str());
 					stringOptimize(destination);
@@ -702,11 +736,13 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 					addflight.status = 2;
 					addflight.totalTicket = planeList.planes[target]->seats;
 					addflight.saleTotal = 0;
+					
 					if(!Edit){
 						addEndList(FL, addflight);
 					}
 					else{
-//						EditFlight(FL,&ID,addflight);
+						EditFlight(FL,addflight.flightCode,addflight);
+						
 					
 					}
 					ID = "";
@@ -716,6 +752,9 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 					order = 0;
 				}
 				quit = true;
+//				cout<<"END CASE 4";
+				getch();
+
 				break;
 			
 		} //  end switch
@@ -736,7 +775,14 @@ void ManageFlightPlane(FlightList &FL) {
 		
 		signal = _getch();
 			
-			if(signal == ESC) { return;
+			if(signal == ESC) { 
+			int n;
+				cout<<"\n Ban co muon luu du lieu ? \n (0 de luu, 1 de thoat)";
+				cin>>n;
+				if(n==0){
+					WriteFlightToFile(FL);
+				}
+				return;
 			}
 			if (signal == 224) {
 				signal = _getch();
@@ -777,8 +823,14 @@ void ManageFlightPlane(FlightList &FL) {
 					CreateForm(ContentFlight,0,6,27);
 					gotoxy(115 + 12,0 * 3 + 4);
 					Nhap_Chuyen_Bay(FL,true, false);
+					getch();
 					TotalFlightPage = (int)ceil( (double)FL.SoLuongChuyenBay/NumberPerPage );
+//					for(PTR_FL ptr=FL.pHead;ptr!=NULL;ptr=ptr->pNext){
+//						cout<<"CHUYEN BAY : "<<ptr->flight.arrivalPlace<<"  "<<ptr->flight.flightCode<<"\n";
+//					}
+					getch();
 					ShowFlightListPerPage(FL,(CurFlightPage-1)/NumberPerPage);
+//					cout<<"END HOME ";
 					
 				}
 				
