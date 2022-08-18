@@ -529,7 +529,7 @@ void WatchStatics() {
 void DateTimeInput(datetime &dt, int order) {
 	
 	gotoxy(x_add + 13 + 2 , order * 3 + y_add);
-	cout << ":";
+	cout << "\b :   \b";
 	gotoxy(x_add + 13 + 8 , order * 3 + y_add);
 	cout << "/";
 	gotoxy(x_add + 13 + 11, order * 3 + y_add);
@@ -623,25 +623,19 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 				
 				search = findFlight(FL,ID.c_str());	
 				
-				if(Edit || Del && search != NULL) {
-					
-					destination =  search->flight.arrivalPlace;
-					serialPlane = search->flight.serialPlane;
-					ID =  search->flight.flightCode;
-					gotoxy(x_add + 16, 0 * 3 + y_add);cout << ID;
-					
-					gotoxy(x_add + 16, 1 * 3 + y_add);cout << destination;
-					gotoxy(x_add + 17, 2 * 3 + y_add);cout << serialPlane;
-					
-					gotoxy(x_add + 16, 5 * 3 + y_add);cout << search->flight.status;
-
-					gotoxy(x_add + 15, 3 * 3 + y_add);OutputDateTime(search->flight.departTime);
-
-					
-					gotoxy(x_add + 16, 4 * 3 + y_add);cout << search->flight.totalTicket;
-					
+				if(search != NULL && Edit == false) { // them chuyen bay moi
+							
+					BaoLoi("ID da ton tai, vui long nhap ID khac");break;
+				
+				
 				}
 				
+				else if(search == NULL && Edit == true) {
+					BaoLoi("ID can sua khong ton tai");break;
+				}
+				else if(search==NULL && DEL== true){
+					BaoLoi("ID can xoa khong ton tai");break;
+				}
 				if(Del && search != NULL) {
 					
 					int res = repeate("Delete", "Xac nhan xoa?");
@@ -663,15 +657,28 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 				
 				}	
 				
-				if(search != NULL && Edit == false) { // them chuyen bay moi
-							
-					BaoLoi("ID da ton tai, vui long nhap ID khac");break;
+				if(Edit  && search != NULL) {
+					
+					destination =  search->flight.arrivalPlace;
+					serialPlane = search->flight.serialPlane;
+					ID =  search->flight.flightCode;
+					gotoxy(x_add + 16, 0 * 3 + y_add);cout << ID;
+					
+					gotoxy(x_add + 16, 1 * 3 + y_add);cout << destination;
+					gotoxy(x_add + 17, 2 * 3 + y_add);cout << serialPlane;
+					
+					gotoxy(x_add + 16, 5 * 3 + y_add);cout << search->flight.status;
+
+					gotoxy(x_add + 14, 3 * 3 + y_add);OutputDateTime(search->flight.departTime);
+
+					
+					gotoxy(x_add + 16, 4 * 3 + y_add);cout << search->flight.totalTicket;
+					
+				}
 				
 				
-				}
-				else if(search == NULL && Edit == true) {
-					BaoLoi("ID can sua khong ton tai");break;
-				}
+				
+				
 				
 				
 				
@@ -715,7 +722,7 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 					DT = { ngay:0, thang:0, nam:0, gio:0, phut:0};
 					DateTimeInput(DT, order);
 					if(!checkValidDT(DT)) {BaoLoi("Thoi gian khong hop le");
-								 gotoxy(x_add + 13, 4 * 3 + y_add); printf("%-33s", " "); break;}
+								 gotoxy(x_add + 14, 4 * 3 + y_add); printf("%-33s", " "); break;}
 				
 				}
 				order++;
@@ -762,6 +769,58 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 	}// end while
 
 }
+string inputIdDelete(){
+//	clrscr();
+	string ID;
+	bool Save=true;
+	ConstraintLetterAndNumber(ID,0,Save,16);
+//	gotoxy(x_add, 0 * 3 + y_add);cout <<"Ma chuyen bay: ";
+//	cin>>ID;
+	
+	return ID;
+	getch();
+}
+void deleteFlight(FlightList &FL,string ID){
+
+				if(ID == "") {
+					
+					BaoLoi(" Vui Long Khong Bo Trong ");
+					return;
+				}
+
+			
+				
+				else {
+					PTR_FL search = findFlight(FL,ID.c_str());	
+					if(search == NULL){
+						BaoLoi("ID can xoa khong ton tai");return;
+					} 
+					
+				
+					else {
+					
+						int res = repeate("Delete", "Xac nhan xoa?");
+						
+						if(res == 1) {
+							
+							if(!DeleteFlightById(FL, ID.c_str())) {
+									BaoLoi("Xoa that bai!");
+							}
+							else 					
+							{
+								BaoLoi("Xoa thanh cong !");
+							}
+						
+							return;
+							
+						}
+						
+					
+					
+				
+				}
+			}
+}
 
 void ManageFlightPlane(FlightList &FL) {
 	
@@ -776,12 +835,15 @@ void ManageFlightPlane(FlightList &FL) {
 		signal = _getch();
 			
 			if(signal == ESC) { 
-			int n;
-				cout<<"\n Ban co muon luu du lieu ? \n (0 de luu, 1 de thoat)";
-				cin>>n;
-				if(n==0){
+				int res = repeate("Save", "Ban co muon luu du lieu ?");
+				if(res == 1) {
 					WriteFlightToFile(FL);
-				}
+					BaoLoi("Luu thanh cong");
+					}
+				else 					
+					{
+					BaoLoi("Xoa thanh cong !");
+					}
 				return;
 			}
 			if (signal == 224) {
@@ -811,9 +873,10 @@ void ManageFlightPlane(FlightList &FL) {
 				}
 				else if(signal == DEL) {
 					system("cls");
-					CreateForm(ContentFlight,0,6,27);
+					CreateForm(ContentFlight,0,1,27);
 					gotoxy(115 + 12,0 * 3 + 4);
-					Nhap_Chuyen_Bay(FL, false, true);
+//					Nhap_Chuyen_Bay(FL, false, true);
+					deleteFlight(FL,inputIdDelete());
 					TotalFlightPage = (int)ceil( (double)FL.SoLuongChuyenBay/NumberPerPage );
 					ShowFlightListPerPage(FL,(CurFlightPage-1)/NumberPerPage);
 				}
