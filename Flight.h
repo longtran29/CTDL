@@ -838,12 +838,10 @@ void ManageFlightPlane(FlightList &FL) {
 				int res = repeate("Save", "Ban co muon luu du lieu ?");
 				if(res == 1) {
 					WriteFlightToFile(FL);
-					BaoLoi("Luu thanh cong");
+					gotoxy(7,27);cout<<"Luu thanh cong";
 					}
-				else 					
-					{
-					BaoLoi("Xoa thanh cong !");
-					}
+				else {
+				}
 				return;
 			}
 			if (signal == 224) {
