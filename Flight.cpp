@@ -1,4 +1,10 @@
 #include "Flight.h"
+//#include "DefineConst.h"
+//#include "graphic.h"
+//#include "Airplane.h"
+//
+//#include "Passenger.h"
+//#include "Interfaces.h"
 
 
 PTR_FL createFlightNode(Flight data) {
@@ -298,13 +304,13 @@ void ShowFlight(Flight FL, int position) {
 	
 	switch(FL.status)
 	{
-	case 1: cout << "Huy     ";
+	case 0: cout << "Huy     ";
 		break;
-	case 2: cout << "Con ve  ";
+	case 1: cout << "Con ve  ";
 		break;
-	case 3: cout << "Het ve  ";
+	case 2: cout << "Het ve  ";
 		break;
-	case 4: cout << "Hoan tat";
+	case 3: cout << "Hoan tat";
 		break;
 	default:
 		break;
@@ -332,7 +338,7 @@ bool checkTimeFlight(flightList &FL){
 	for(PTR_FL k=FL.pHead;k!=NULL;k=k->pNext){
 		tmp=k->flight.departTime;
 		if(checkValidDT(tmp)==false){
-			k->flight.status=4;
+			k->flight.status=3;
 			flag=false;
 		}	
 	}
@@ -344,7 +350,7 @@ bool checkTimeFlight(flightList &FL){
 
 
 void ShowFlightListPerPage(FlightList FL,int index) {
-	checkTimeFlight(FL);
+	checkTimeFlight(FL);//ham cap nhat trang thai cuar chuyen bay
 	system("cls");
 	Display(ContentFlight,6);
 	gotoxy(1,2);
@@ -353,7 +359,11 @@ void ShowFlightListPerPage(FlightList FL,int index) {
 	
 	if(FL.pHead == NULL || FL.pTail == NULL) return;
 	int i=0;
-	
+	/*
+	index la chi so dau cuar moi trang vd la 0,6,12,18,....
+	duyet danh sach de khi count = index thi se bat dau in ra mot trang moi 
+	cho den khi du so dong thi dung lai
+	*/
 	for(PTR_FL search= FL.pHead; search != NULL; search = search->pNext ) {
 		
 		count++; // thay doi con tro chay trong list
@@ -426,6 +436,18 @@ void Swap(int &a, int &b) {
 	a = b;
 	b = temp;
 }
+bool capNhatSoLanBay(FlightList &FL,int index0,listPlane &lstPlane){
+	int dem=0;
+	for(PTR_FL k=FL.pHead;k!=NULL;k=k->pNext){
+		if(k->flight.status=3&&strcmp(k->flight.serialPlane,lstPlane.planes[index0]->serialPlane)==0){
+			dem++;
+			
+		}
+	}
+	lstPlane.planes[index0]->flights_num=dem;
+	
+	return true;
+}
 
 void bubbleSortPlane(listPlane planeList, int A[]) {
 
@@ -452,22 +474,31 @@ void ShowHowManyTimesAirplaneTookOff(DetailInfo *A,int position) {
 /*Thong ke so chuyen bay cua 1 hang may bay*/
 void WatchStatics() {
 
-	system("cls");
+//	system("cls");
+	clrscr();
+	system("color 0E");
+	SetColor(14);
+	SetBGColor(0);
 	gotoxy(X_Title, Y_Title);
 	cout << " SO CHUYEN BAY DA THUC HIEN CUA CAC MAY BAY";	
-	string StaticsTable[3] = { "Number","ID Plane" ,"Fly Times"};
+	
+
+	string StaticsTable[] = { "STT","MA MAY BAY" ,"SO LAN THUC HIEN CHUYEN BAY"};
 
 	gotoxy(xKeyDisplay[0] + 3, Y_Display + 0 * 3); cout<<StaticsTable[0];
 	gotoxy(xKeyDisplay[1] + 3, Y_Display + 0 * 3); cout<<StaticsTable[1];
 	gotoxy(xKeyDisplay[2] + 3,Y_Display + 0 * 3);  cout<<StaticsTable[2];
 
 	int slmb = planeList.n; // slmb
+//	cout<<slmb ;
 	int A[slmb];
 	for(int i=0; i< slmb; i++) A[i] = i;
 
 	bubbleSortPlane(planeList, A);
 
 	for(int i =0; i< slmb; i++) {
+		capNhatSoLanBay(FL,i,planeList);
+		
 		ShowHowManyTimesAirplaneTookOff(planeList.planes[A[i]],i); // in ra mb tai vi tri thu A[i]
 
 	}
@@ -476,6 +507,7 @@ void WatchStatics() {
 	int signal;
 	while (true)
 	{
+
 		signal = _getch();
 		if (signal == ESC)
 		{
@@ -485,10 +517,6 @@ void WatchStatics() {
 
 
 }
-
-
-
-
 void DateTimeInput(datetime &dt, int order) {
 	
 	gotoxy(x_add + 13 + 2 , order * 3 + y_add);
@@ -528,6 +556,143 @@ void DateTimeInput(datetime &dt, int order) {
 
 }
 
+bool checkDate(Flight &f,datetime &dt){
+	return (f.departTime.nam==dt.nam&&f.departTime.thang==dt.thang&&f.departTime.ngay==dt.ngay);
+}
+
+bool checkArrivalPlace(Flight &f, char arrivalPlace[]){
+	return (strcmp(f.arrivalPlace,arrivalPlace)==0);
+}
+
+FlightList dateAndPlaceFlight(FlightList &FL,datetime &dt,char arrivalPlace[] ){
+	FlightList tdk;
+	initFlightList(tdk);
+	for(PTR_FL k=FL.pHead;k!=NULL;k=k->pNext){
+		if(checkDate(k->flight,dt)&&checkArrivalPlace(k->flight,arrivalPlace)){
+			addEndList(tdk,k->flight);
+		}
+	}
+	return tdk;	
+	
+}
+datetime inputDateTime(){
+	datetime DT;
+	InitDataTime(DT);
+	DT = { ngay:0, thang:0, nam:0, gio:0, phut:0};
+	DateTimeInput(DT,3);
+	if(!checkValidDT(DT)) {BaoLoi("Thoi gian khong hop le");}
+	gotoxy(x_add + 14, 4 * 3 + y_add); printf("%-33s", " "); 
+	return DT;
+				
+		
+}
+datetime inputDateTime2(){
+	datetime DT;
+	InitDataTime(DT);
+	DT = { ngay:0, thang:0, nam:0, gio:0, phut:0};
+	DateTimeInput(DT,3);
+	gotoxy(x_add + 14, 4 * 3 + y_add); printf("%-33s", " "); 
+	return DT;
+				
+		
+}
+
+string inputArrivalPlace(){
+//	clrscr();
+	string destination;
+	bool Save=true;
+	ConstraintsForLetterAndSpace(destination,Save,2,16);
+//	gotoxy(x_add, 0 * 3 + y_add);cout <<"Ma chuyen bay: ";
+//	cin>>ID;
+	
+	return destination;
+	getch();
+}
+
+void printFlightList(FlightList &FL,datetime dt, char arrivalPlace[]){
+	clrscr();
+	int n=FL.SoLuongChuyenBay;
+	const int XV=0,YV=10;
+	const int sodv=10;
+	const int sotruong=4;//khong sua
+	const int dorongdv=5;
+	const int dorongtruong[sotruong]={2,3,6,2};
+	
+	int	cd=sodv*dorongdv, bd[sotruong+1];
+	bd[0]=0;
+	for (int i=1;i<sotruong;i++) bd[i]=bd[i-1]+dorongtruong[i-1];//bd={0,1,3,9,11,12}
+	gotoxy(20,5);
+	cout << " Danh sach chuyen bay ";	
+	khungIn k=khungIn(cd,1000,sodv,XV,YV);
+
+	
+		k.chuyen(bd[0],-2);
+		cout<<"| STT";
+		k.chuyen(bd[1],-2);
+		cout<<"| MA CHUYEN BAY";
+		k.chuyen(bd[2],-2);
+		cout<<"| THOI GIAN DI";
+		k.chuyen(bd[3],-2);
+		cout<<"| TRANG THAI";			
+	
+
+	
+
+////////////////////////////////////////// DUYET O DAY //////////////////////////////////////////
+		int i=0;
+		FlightList flDateAndPlace = dateAndPlaceFlight(FL,dt,arrivalPlace);
+		for (PTR_FL ptr=flDateAndPlace.pHead;ptr!=NULL;ptr=ptr->pNext)
+		{
+		
+		k.chuyen(bd[0],i);
+		cout<<"| "<<i;
+		k.chuyen(bd[1],i);
+		cout<<"| "<<ptr->flight.flightCode;
+		k.chuyen(bd[2],i);
+		cout<<"| ";OutputDateTime(ptr->flight.departTime);
+		k.chuyen(bd[3],i);
+		cout<<"| "<<ptr->flight.status;
+
+		i++;
+		}
+}
+
+void Watch_8(){
+
+	system("cls");
+	system("color 0E");
+	SetColor(14);
+	SetBGColor(0);
+	gotoxy(24,10);cout<<"SAN BAY DEN :";
+	gotoxy(24,13);cout<<"THOI GIAN :";
+	string arrivalPlace = inputArrivalPlace();
+	datetime dt = inputDateTime2();
+	clrscr();
+	char* arrivalPlace2 = new char[arrivalPlace.length()];
+	strcpy(arrivalPlace2, arrivalPlace.c_str());
+	printFlightList(FL,dt,arrivalPlace2);
+
+
+	int signal;
+	while (true)
+	{
+		signal = _getch();
+		if (signal == ESC)
+		{
+			return;
+		}
+	}
+
+
+}
+
+
+
+
+
+
+
+
 
 PTR_FL checkDupOnOtherFlight(FlightNode* first, FlightNode* xFlight, int idHK)  { 
 
@@ -564,7 +729,7 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 	string destination;
 	string serialPlane;
 	int nTicket = 0 ;
-	int status = 2 ; // luon con ve
+	int status = 1 ; // luon con ve
 	int order = 0;
 	datetime DT;
 	int target;
@@ -704,7 +869,7 @@ void Nhap_Chuyen_Bay(FlightList &FL, bool Edit, bool Del) {
 					strcpy(addflight.arrivalPlace, destination.c_str());
 					strcpy(addflight.serialPlane, serialPlane.c_str());
 					addflight.departTime = DT;
-					addflight.status = 2;
+					addflight.status = 1;
 					addflight.totalTicket = planeList.planes[target]->seats;
 					addflight.saleTotal = 0;
 					
@@ -786,6 +951,7 @@ void deleteFlight(FlightList &FL,string ID){
 			}
 }
 
+
 void ManageFlightPlane(FlightList &FL) {
 	
 	system("cls");
@@ -866,3 +1032,4 @@ void ManageFlightPlane(FlightList &FL) {
 	}
 	
 }
+

@@ -8,6 +8,7 @@ int CurFlightPage;
 
 string ContentFlight[]= { "Ma Chuyen Bay","San Bay Den"	,"So Hieu May Bay","Thoi Gian Di","Tong So Ve","Trang Thai"};
 string InsertContentFL[]= { "Ma Chuyen Bay","San Bay Den","So Hieu May Bay","Thoi Gian Di"};
+string ContentFL8[]= { "Ma Chuyen Bay","Thoi Gian Di"};
 
 struct flight {
 
@@ -15,7 +16,7 @@ struct flight {
 	char arrivalPlace[20];
 	datetime departTime;
 	char serialPlane[15];
-	int status; // 1: huy chuyen 2:con ve 3:het ve 4:hoan tat
+	int status; // 0: huy chuyen 1:con ve 2:het ve 3:hoan tat
 	Ticket *TicketList= new Ticket[100]; // danh sách ve dã bán 
 	
 	int totalTicket; // so luong ve cho chuyen bay
