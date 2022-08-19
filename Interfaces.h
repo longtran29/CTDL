@@ -6,7 +6,7 @@ char thucdon [so_item][50] = {  "1.Quan Li Cac May Bay",
 					   "4.Huy Bo Ve May Bay",
 					   "5.Xem Danh Sach Hanh Khach Chi Tiet",
 					   "6.Xem Chi Tiet So Lan Thuc Hien Chuyen Bay",
-					   "7.Xem So Do Cho Ngoi & Danh Sach Ve Con Trong",
+					   "7.Danh Sach Ve Con Trong",
 					   "8.Xem Cac Chuyen Bay Di Toi Cac Dia Danh",
 					   "0. Thoat chuong trinh"};
 			          
@@ -51,6 +51,14 @@ void MenuCenter(){
 			case 6:
 				system("color 0E");
 				WatchStatics();
+				break;
+			case 7:
+				system("color 0E");
+				VacantTicketSlot(FL);
+				break;
+			case 8:
+				system("color 0E");
+				ListFlightInDayAnDest(FL);
 				break;
 			case so_item:
 				

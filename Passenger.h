@@ -318,6 +318,7 @@ void ChangeTicket(int pos) {
 	
 }
 
+
 /* trang thai cho ngoi  */
 int CheckStatus(Flight F, int x) {
 	
@@ -432,6 +433,64 @@ int ChooseTicket(Flight F) {
 	
 }
 
+/*Danh sach ve con trong cua chuyen bay*/
+void VacantTicketSlot(FlightList FL) {
+	
+	system("cls");
+	gotoxy(X_Title, Y_Title);
+	cout << "Nhap ma chuyen bay de kiem tra : ";
+	CreateForm(ContentFlight, 0, 1,0);
+	string result;
+	bool Save = true; int order = 0;
+	bool quit = false; PTR_FL currentFlight;
+	int x = X_Ticket+ 8;
+	int y = Y_Ticket + 5;	
+	int Limit , res = 0, count = 0;
+	while(!quit) {
+		ConstraintLetterAndNumber(result,order,Save, 15);
+		ShowCur(true);
+		if(Save == false)  { RemoveFormComplete(); return;}
+		
+		currentFlight = findFlight(FL, result.c_str());
+		if(currentFlight == NULL) {
+			 BaoLoi("MaCB khong ton tai");
+		}
+		else {
+			Limit = currentFlight->flight.totalTicket;
+			RemoveFormComplete();
+			quit = true;
+		}
+	}
+	
+		gotoxy(X_Title, Y_Title);
+		cout << " Danh sach ve con trong cua " << currentFlight->flight.flightCode << " toi " << currentFlight->flight.arrivalPlace<< " luc ";
+		OutputDateTime(currentFlight->flight.departTime);
+		
+		gotoxy(X_Title, Y_Title+5); cout<<"So luong ve con trong la : " << currentFlight->flight.totalTicket - currentFlight->flight.saleTotal;
+		
+		for(int i=1; i<= Limit; i++) {
+	
+			res = CheckStatus(currentFlight->flight,i);
+			
+			if(res == 0) {
+				count++;
+				TicketSlot(x,y,i,res);
+			
+			}
+			else {
+			
+				continue;
+			}
+			x += 8;
+			if(count%10 ==0) {
+				y+=5;
+				x = X_Ticket + 8;		
+			}
+	}
+	
+	getch();
+	
+}
 
 
 void CreatePassenger(AVLTree &root,bool &Save, bool Edit, bool Del, int ID) { // nhap new in4 passenger
@@ -775,9 +834,6 @@ void BookTicket(AVLTree &root) {
 					if(Save == false) continue;
 			
 				}
-				
-				
-			
 				RemoveFormComplete();
 			
 			

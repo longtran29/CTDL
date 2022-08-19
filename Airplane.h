@@ -14,14 +14,14 @@ struct DetailInfo {
 	char serialPlane[15];
 	char typePlane[40];
 	int seats;
-	int flights_num =0; // thong ke so lan thuc hien cb
+	int flights_num ; // thong ke so lan thuc hien cb
 	
 };
 
 
 struct Plane {
 	
-	int n=0;
+	int n;
 	DetailInfo *planes[MAXLIST];
 }  ;
 
