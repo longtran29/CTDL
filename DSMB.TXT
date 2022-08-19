@@ -7,4 +7,5 @@ VJ8956 Vietjet 45
 VJ7856 Vietjet 75
 JT856 Jetstar 82
 JT8562 Jetstar 68
-VN2317 Vietstar 52
+VN2317 Vietstar 21
+JT1952 Jetstart 58

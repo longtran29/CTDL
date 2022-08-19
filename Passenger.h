@@ -32,15 +32,6 @@ int CurPosPreTicket = 1;
 
 int nPassenger= 0; // bien dem sl hanh khach
 
-int CheckStatus(Flight F, int x) {
-	
-	for(int i=0;i< F.saleTotal; i++) {
-		if(x== F.TicketList[i].Status) return 1;
-	}
-	
-	return 0;
-}
-
 
 AVLTree CreateTree(Passenger data) {
 	
@@ -149,16 +140,16 @@ PassengerNode* findPassenger(AVLTree root, int CMND) {
 	
 }
 
-
-
 // save passenger
 
 void SaveOnePassenger(AVLTree root ,ofstream &fileout) {
 	
-	fileout << root->data.CMND << endl;
-	fileout << root->data.Surname << endl;
-	fileout << root->data.Name << endl;
-	fileout << root->data.Gender << endl;
+	Passenger psg = root->data;
+	
+	fileout <<psg.CMND << endl;
+	fileout << psg.Surname << endl;
+	fileout << psg.Name << endl;
+	fileout << psg.Gender << endl;
 
 
 }
@@ -228,21 +219,70 @@ void WatchPassengerFlight(AVLTree root, Flight F) { // menu  case 5 :  show hanh
 
 
 // load passenger
+//void LoadPassengerFromFile(AVLTree &root) {
+//	ifstream filein;string temp= " ";char lot[50];
+//	
+//	filein.open("DSHK.TXT", ios_base::in);
+//	if(filein.is_open()) {
+//		
+//		filein>>nPassenger;
+//		for(int i=0; i<nPassenger; i++) {
+//			Passenger psg;
+//		
+//			getline(filein,temp);
+//			filein>>psg.CMND;
+//			
+//			filein>>psg.Surname;
+//			filein >> lot;
+//
+//			strcat(psg.Surname, " ");
+//			strcat(psg.Surname, lot);
+//			cout<<psg.Surname;
+//			
+//			filein>>psg.Name;
+//			filein>>psg.Gender;
+//			
+//			AVLTree new_Psg = CreateTree(psg);
+//			
+//			root = AddPassenger(root,new_Psg);
+//		}
+//	}
+//	
+//}
+
+
+
 void LoadPassengerFromFile(AVLTree &root) {
-	ifstream filein;string temp;
+	ifstream filein;
 	
 	filein.open("DSHK.TXT", ios_base::in);
 	if(filein.is_open()) {
 		
 		filein>>nPassenger;
 		for(int i=0; i<nPassenger; i++) {
-			Passenger psg;
+			Passenger psg;char lot[50];
 		
-	//		getline(filein,temp);
 			filein>>psg.CMND;
 			
-			filein>>psg.Surname;
+//			string line; string value;
+//	        while (getline(filein, line))
+//	        {
+//	            istringstream iss(line);
+//	            string City, Country, Population;
+//
+//	         
+//	
+//	            if (getline(iss, City, ' ') && getline(iss, Country, ' ') && iss >> Population)
+//	               
+//					  value = City + Country + Population;
+//				psg.Surname = value;
+//	        }
 			
+//			filein >> lot;
+			filein>>psg.Surname;
+			filein>>lot;
+			strcat(psg.Surname, " ");
+			strcat(psg.Surname, lot);
 			filein>>psg.Name;
 			filein>>psg.Gender;
 			
@@ -254,47 +294,7 @@ void LoadPassengerFromFile(AVLTree &root) {
 	
 }
 
-void TicketSlot(int x, int y, int pos, int status) {
-	
-	SetColor(14);// yellow
-	SetBGColor(0);// black
-
-	gotoxy(x,y-1);
-	cout << char(176) << setw(3) << setfill(char(176)) << char(176) << char(176);
-	gotoxy(x, y);
-	cout << char(176) << setw(3) << setfill('0')<<pos<<char(176);
-	/*ve duong ke ben duoi cua cai ve*/
-	gotoxy(x,y+1);
-	if (status == 1) {
-		SetBGColor(5);
-	}
-	cout << char(176) << setw(3) << setfill(char(176)) << char(176) << char(176);
-
-}
-
-void TicketSlotTable(Flight F) { // dashboard tiket slot
-	int x = X_Ticket+ 8;
-	int y = Y_Ticket + 5;
-	
-	int Limit = F.totalTicket;
-	
-	for(int i=1; i<= Limit; i++) {
-	
-		TicketSlot(x,y,i, CheckStatus(F,i));
-		
-			x+=8;
-			if(i%10 ==0) {
-				y+=5;
-				x = X_Ticket + 8;		
-			}
-	
-	
-	}
-	
-
-
-}
-
+/*Di chuyen thanh sang */
 void ChangeTicket(int pos) {
 	
 	ShowCur(false);
@@ -318,9 +318,56 @@ void ChangeTicket(int pos) {
 	
 }
 
+/* trang thai cho ngoi  */
+int CheckStatus(Flight F, int x) {
+	
+	for(int i=0;i< F.saleTotal; i++) {
+		if(x== F.TicketList[i].Status) return 1;
+	}
+	
+	return 0;
+}
+
+/* hien thi 1 cho ngoi  */
+void TicketSlot(int x, int y, int pos, int status) {
+	
+	SetColor(243);
+	SetBGColor(0);
+
+	gotoxy(x,y-1);
+	cout << char(176) << setw(3) << setfill(char(176)) << char(176) << char(176);
+	gotoxy(x, y);
+	cout << char(176) << setw(3) << setfill('0')<<pos<<char(176);
+	/*ve duong ke ben duoi cua cai ve*/
+	gotoxy(x,y+1);
+	if (status == 1) {
+		SetBGColor(248);
+	}
+	cout << char(176) << setw(3) << setfill(char(176)) << char(176) << char(176);
+
+}
+
+/* So do cho ngoi  */
+void TicketSlotTable(Flight F) { 
+	int x = X_Ticket+ 8;
+	int y = Y_Ticket + 5;	
+	int Limit = F.totalTicket;
+	
+	for(int i=1; i<= Limit; i++) {
+	
+			TicketSlot(x,y,i, CheckStatus(F,i));
+		
+			x += 8;
+			if(i%10 ==0) {
+				y+=5;
+				x = X_Ticket + 8;		
+			}
+	}
+}
 
 
-int ChooseTicket(Flight F) { // dash
+/* So do dat ve */
+int ChooseTicket(Flight F) { 
 	ShowCur(false);
 	CurPosTicket = 1;
 	CurPosPreTicket = 1;
@@ -367,8 +414,13 @@ int ChooseTicket(Flight F) { // dash
 				return -1;
 			case ENTER:
 				if(CheckStatus(F,CurPosTicket) == 1) {
-					BaoLoi("Ghe nay da co ng dat");
-					break;
+				SetColor(243);
+				gotoxy(3, 5);
+				cout << "Ve nay da co Hanh khach dat cho";
+				Sleep(1000);
+				gotoxy(3, 5);
+				printf("%-50s", " ");
+				break;
 				}
 				quit = true;
 				return CurPosTicket;
@@ -393,9 +445,9 @@ void CreatePassenger(AVLTree &root,bool &Save, bool Edit, bool Del, int ID) { //
 	gotoxy(x_add+10,4*3+y_add); cout<<" 0 la nu , 1 la nam";
 	
 	int ch ;
+	bool quit = false;
 	
-	
-	while(true) {
+	while(!quit) {
 		
 		switch(order) {
 			
@@ -431,11 +483,14 @@ void CreatePassenger(AVLTree &root,bool &Save, bool Edit, bool Del, int ID) { //
 					ConstraintForOnlyGender(gender,order,Save,12);
 			
 					if(Save == false ) { RemoveFormComplete(); return;}
-					if(gender == -1) BaoLoi("Khong bo trong"); continue;
+					if(gender == -1) {
+						BaoLoi("Khong bo trong"); continue;
+					}
 					
-					order++;
+					
 				
 				}
+				order++;
 				break;
 			case 4:
 				{
@@ -453,11 +508,13 @@ void CreatePassenger(AVLTree &root,bool &Save, bool Edit, bool Del, int ID) { //
 				
 					root =  AddPassenger(root,newPsg);
 					
-					BaoLoi("Them hanh khach thanh cong !");		
+					BaoLoi("Dat ve thanh cong !");		
 					return;
 					
 				}
+				quit = true;
 				break;
+				
 			
 		}
 	
@@ -626,6 +683,7 @@ void BookTicket(AVLTree &root) {
 	string result;
 	PTR_FL currentFlight = NULL; 
 	bool quit = false;
+	ShowCur(true);
 	
 	while(flag == false ) {
 		ConstraintLetterAndNumber(result,order,Save, 15);
@@ -656,8 +714,8 @@ void BookTicket(AVLTree &root) {
 			cout << " Danh sach hanh khach co ma chuyen bay " << currentFlight->flight.flightCode << " toi " << currentFlight->flight.arrivalPlace<< " luc ";
 			OutputDateTime(currentFlight->flight.departTime);
 			
-			gotoxy(20,5);
-			cout << "Warn: VE MAU DO LA DA CO NGUOI DAT ROI !!";
+			gotoxy(20,8);
+			cout<<"Warn: VE MAU DO LA DA CO NGUOI DAT ROI !!";
 		
 			system("color 0E");
 			int choosen = ChooseTicket(currentFlight->flight);

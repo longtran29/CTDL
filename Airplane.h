@@ -265,8 +265,9 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
  		int nchair;
  		int target;
  		bool Save = true;
- 	
- 	bool quit = false;
+ 		ShowCur(true);
+ 		bool quit = false;
+ 		
  	while(!quit) {
  		
  		switch(order) {
@@ -286,14 +287,20 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 					target = FindIndexAirplane(list,ID.c_str());
 					
 					
-					if(Edit || Del && target != -1 ){
-						ID = list.planes[target]->serialPlane;
-						typePlane = list.planes[target]->typePlane;
-						nchair = list.planes[target]->seats;
-						
-						gotoxy(x_add+12,0*3+y_add); cout<< ID;
-						gotoxy(x_add+12,1*3+y_add); cout<< typePlane;
-						gotoxy(x_add+12,2*3+y_add); cout<< nchair;
+					if(Edit || Del ){
+						if(target != -1) {
+								ID = list.planes[target]->serialPlane;
+								typePlane = list.planes[target]->typePlane;
+								nchair = list.planes[target]->seats;
+								
+								gotoxy(x_add+12,0*3+y_add); cout<< ID;
+								gotoxy(x_add+12,1*3+y_add); cout<< typePlane;
+								gotoxy(x_add+12,2*3+y_add); cout<< nchair;
+						}
+						else {
+							BaoLoi("ID khong ton tai ");
+							continue;
+						}
 						
 					}
 					
@@ -304,10 +311,10 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 						if(commit == 1) {
 							if(!RemoveAirplane(list,target) ){
 								
-									BaoLoi("ID not exists . Delete Fail !");
+									BaoLoi("ID may bay khong ton tai!");
 								
 								}
-							else BaoLoi("Delete Success !");	
+							else BaoLoi("Xoa thanh cong !");	
 						}
 						else return;
 						
@@ -322,7 +329,7 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 					}	
 					
 					if(target <0 && Edit) { // khong chinh sua duoc
-						BaoLoi("ID not exists !");
+						BaoLoi("ID khong ton tai !");
 						break;
 					}		
 					
@@ -354,14 +361,11 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
  						return;
 					 }
 					 
- 				if(nchair <1) {
- 					BaoLoi("Khong hop le");
+ 				if(nchair <1 || nchair< 20) {
+ 					BaoLoi("Khong hop le ( 1< so ghe < 20)");
 					break;
 				 }
-				if(nchair< 20) {
-					BaoLoi("So ghe >= 20");
-					break;
-				}
+			
 				order++;
  				break;
  			case 3:
@@ -371,7 +375,7 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
  					strcpy(list.planes[target]->typePlane, typePlane.c_str());
  					list.planes[target]->seats = nchair;
  					gotoxy(X_Notification,Y_Notification+1);
-					BaoLoi("Update successful!");
+					BaoLoi("Cap nhat thanh cong!");
  					
 				 }
 				 else // them moi
@@ -382,7 +386,7 @@ void Nhap_MB(listPlane &list, bool Edit, bool Del) {
 						strcpy((list.planes[list.n]->typePlane),typePlane.c_str());
 						list.planes[list.n]->seats = nchair;
 						list.n++;
-						BaoLoi("Added successful!");
+						BaoLoi("Them thanh cong!");
 					 }
 				RemoveFormComplete();
 // 				WriteAirplaneToFile(list);

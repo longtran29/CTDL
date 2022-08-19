@@ -49,7 +49,7 @@ void MenuCenter(){
 				WatchPassengerList(root);
 				break;
 			case 6:
-				
+				system("color 0E");
 				WatchStatics();
 				break;
 			case so_item:
